@@ -8,9 +8,7 @@ Currently does not hide geomancy effect around luopans.
 Changelog:
  
 1.0.3 - A few tweaks.
-
 1.0.1 - Fixed a bug where Indi-Nope would make Master stars disappear. Thanks Kenshi for finding out.
-
 1.0.0 - Initial
  
 Thanks to Thorny, this addon is a port to windower of his Ashita code with the same functionality.
