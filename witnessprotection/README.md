@@ -4,9 +4,6 @@ This addon takes care of renaming all the characters you encounter to random nam
 
 Potentially useful for, well, streamers or videomakers that want to mantain partial anonymity on the internet. Probably useful for other things but I'll leave that up to you to find. It was also quite fun to write.
 
-**Download:**  
-[url=https://github.com/lili-ffxi/FFXI-Addons/]https://github.com/lili-ffxi/FFXI-Addons/[/url]
-
 **IMPORTANT:** witness protection is still very much incomplete. It should not break anything but there might be a few hiccups. Please report them by posting in this thread, thanks!
 
 Changelog:
