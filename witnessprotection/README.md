@@ -24,6 +24,7 @@ All the code in this has been written by me, but the original idea belong to [i]
 **To-do:**  
 - fix the above  
 - include and test Synthesis messages.  
+- write a better readme.  
 - not sure what else.  
 
 Please test it (at your own risk!) and report any suggestion/bugs/improvements. Thanks, and enjoy!  
