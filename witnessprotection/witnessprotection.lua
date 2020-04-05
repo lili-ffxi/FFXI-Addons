@@ -1,5 +1,5 @@
 _addon.name = 'Witness Protection'
-_addon.version = '0.0.8'
+_addon.version = '0.0.9'
 _addon.author = 'Lili'
 _addon.command = 'wit'
 
@@ -81,17 +81,19 @@ windower.register_event('incoming chunk',function(id, original, modified, inject
 
 		local name_key = fields[id].name_key
 		local original_name = p[name_key]
-
-		if #original_name < 3 then return end
+		local len = #original_name 
+		
+		if len < 3 then return end
 		
 		if name_cache[original_name] then
 			new_name = name_cache[original_name]
 		elseif fields[id].has_id then
 			local index = p[fields[id].id_key]
-			new_name = syllabize(index):gsub("^%l", string.upper)
+			local max_len = len+3-(len-1)%4
+			new_name = syllabize(index):sub(1,max_len):gsub("^%l", string.upper)
 			name_cache[original_name] = new_name
 			reverse_cache[new_name] = original_name
-			dbg('%03X':format(id),'New:',original_name,new_name)
+			dbg('%03X':format(id),'New:',original_name,new_name,#original_name,max_len)
 		elseif anon_cache[original_name] then
 			new_name = anon_cache[original_name]
 		else
@@ -100,7 +102,7 @@ windower.register_event('incoming chunk',function(id, original, modified, inject
 			reverse_cache[new_name] = original_name
 			dbg('%03X':format(id),'New anon:',original_name,new_name)				
 		end
-		dbg('%03X':format(id),original_name,new_name)
+		--dbg('%03X':format(id),original_name,new_name)
 		p[name_key] = new_name
 		return(packets.build(p))
 	end
@@ -125,6 +127,12 @@ function print_cache()
 	table.vprint(reverse_cache)
 end
 
-windower.register_event('addon command',function()
-	print_cache()
+windower.register_event('addon command',function(cmd)
+	if cmd == 'r' then
+		windower.send_command('lua r witnessprotection')
+	elseif cmd == 'u' then
+		windower.send_command('lua u witnessprotection')
+	else
+		print_cache()
+	end
 end)
