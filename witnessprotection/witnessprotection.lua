@@ -35,7 +35,7 @@ local fields = {
 }
 
 local name_cache = { -- Can put in here any default renaming you want
-	['Selindrile'] = 'Thiccmithra',
+	['Example'] = 'Elpmaxe',
 }
 local anon_cache = {}
 local reverse_cache = {}
