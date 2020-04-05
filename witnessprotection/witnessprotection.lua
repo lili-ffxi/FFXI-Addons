@@ -13,24 +13,24 @@ function dbg(...)
 end
 
 local fields = {
-	[0x00A] = {['name_key'] = 'Player Name',	has_id = true,	['index_key'] = 'Player'		},
-	[0x00D] = {['name_key'] = 'Character Name',	has_id = true,	['index_key'] = 'Player'		},
-	[0x0DD] = {['name_key'] = 'Name', 			has_id = true,	['index_key'] = 'ID'			},
+	[0x00A] = {['name_key'] = 'Player Name',	has_id = true,	['id_key'] = 'Player'		},
+	[0x00D] = {['name_key'] = 'Character Name',	has_id = true,	['id_key'] = 'Player'		},
+	[0x0DD] = {['name_key'] = 'Name', 			has_id = true,	['id_key'] = 'ID'			},
 
-	[0x027] = {['name_key'] = 'Player Name',	has_id = true,	['index_key'] = 'Player'		},
-	[0x017] = {['name_key'] = 'Sender Name',	has_id = false,									},	
-	[0x0B6] = {['name_key'] = 'Target Name',	has_id = false,									},
-	[0x078] = {['name_key'] = 'Proposer Name',	has_id = true,	['index_key'] = 'Proposer ID'	},
-	[0x079] = {['name_key'] = 'Proposer Name',	has_id = false,									},
-	[0x0CA] = {['name_key'] = 'Player Name',	has_id = false,									},
-	[0x0CC] = {['name_key'] = 'Player Name',	has_id = false,									},
-	[0x0DC] = {['name_key'] = 'Inviter Name',	has_id = false,									},
-	--[0x0E2] = {['name_key'] = 'Name',			has_id = true,	['index_key'] = 'ID'			}, -- Seems unnecessary
-	[0x106] = {['name_key'] = 'Name',			has_id = false									},
-	[0x107] = {['name_key'] = 'Name',			has_id = false									},
-	[0x108] = {['name_key'] = 'Name',			has_id = true,	['index_key'] = 'ID'			},
-	[0x109] = {['name_key'] = 'Buyer Name',		has_id = true,	['index_key'] = 'Buyer ID'		},
-	[0x10A] = {['name_key'] = 'Buyer Name',		has_id = false									},	
+	[0x027] = {['name_key'] = 'Player Name',	has_id = true,	['id_key'] = 'Player'		},
+	[0x017] = {['name_key'] = 'Sender Name',	has_id = false,								},	
+	[0x0B6] = {['name_key'] = 'Target Name',	has_id = false,								},
+	[0x078] = {['name_key'] = 'Proposer Name',	has_id = true,	['id_key'] = 'Proposer ID'	},
+	[0x079] = {['name_key'] = 'Proposer Name',	has_id = false,								},
+	[0x0CA] = {['name_key'] = 'Player Name',	has_id = false,								},
+	[0x0CC] = {['name_key'] = 'Player Name',	has_id = false,								},
+	[0x0DC] = {['name_key'] = 'Inviter Name',	has_id = false,								},
+	--[0x0E2] = {['name_key'] = 'Name',			has_id = true,	['id_key'] = 'ID'			}, -- Seems unnecessary
+	[0x106] = {['name_key'] = 'Name',			has_id = false								},
+	[0x107] = {['name_key'] = 'Name',			has_id = false								},
+	[0x108] = {['name_key'] = 'Name',			has_id = true,	['id_key'] = 'ID'			},
+	[0x109] = {['name_key'] = 'Buyer Name',		has_id = true,	['id_key'] = 'Buyer ID'		},
+	[0x10A] = {['name_key'] = 'Buyer Name',		has_id = false								},	
 	--[0x070] = {['name_key'] = 'Player Name'	has_id = false, }--Untested
 }
 
@@ -87,7 +87,7 @@ windower.register_event('incoming chunk',function(id, original, modified, inject
 		if name_cache[original_name] then
 			new_name = name_cache[original_name]
 		elseif fields[id].has_id then
-			local index = p[fields[id].index_key]
+			local index = p[fields[id].id_key]
 			new_name = syllabize(index):gsub("^%l", string.upper)
 			name_cache[original_name] = new_name
 			reverse_cache[new_name] = original_name
