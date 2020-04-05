@@ -1,4 +1,4 @@
-* Witness Protection ver. 0.0.7
+# Witness Protection ver. 0.0.7
 
 This addon takes care of renaming all the characters you encounter to random names. The goal is to anonymize the screen to make it impossible, or at least very difficult, to recognize who you are or what server you are on by watching a video or a stream.  
 
