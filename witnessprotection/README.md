@@ -10,9 +10,10 @@ Potentially useful for, well, streamers or videomakers that want to mantain part
 **IMPORTANT:** witness protection is still very much incomplete. It should not break anything but there might be a few hiccups. Please report them by posting in this thread, thanks!
 
 Changelog:
-- 0.0.9 - correctly assigns name lengths
-- 0.0.8 - switched from Index to ID
-- 0.0.7 - first public release
+- 0.0.10 - added incoming /check notifications and improved generation of names
+-  0.0.9 - correctly assigns name lengths
+-  0.0.8 - switched from Index to ID
+-  0.0.7 - first public release
 
 **How does it work:**
 It reassign names both to characters that show up on screen, and to names in chat (party, linkshell, /say, /yell, etc). Names are cached and are persistent during each session, but are reset if you close the game or reload the addon.  
