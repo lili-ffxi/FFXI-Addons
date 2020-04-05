@@ -56,7 +56,7 @@ end
 
 function syllabize(number)
 	local number = '%X':format(number)
-	--dbg(number)
+	dbg(number)
 	local r = ''
 	for i = #number,1,-1 do
 		r = r..cypher[number:sub(i,i)]
