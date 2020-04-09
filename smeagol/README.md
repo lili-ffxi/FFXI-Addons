@@ -6,7 +6,7 @@ Smeagol will use CP rings at level 99, or XP rings at any level below 99.
 Rings need to be in Inventory, or Wardrobe 1-4. If you want to keep a ring from
 being used, put it in any other bag.
 
-**Commands:**
+**Commands:**  
 //smeagol on|start|off|stop - starts or stops Smeagol.  
 //smeagol xp|cp|normal - forces the choice of xp/cp rings regardless of level, or disables override.  
 //smeagol <number> - how often Smeagol should check if an exp buff is active, in seconds. Default is 4.  
@@ -14,7 +14,7 @@ being used, put it in any other bag.
 //smeagol reset - restores default settings.  
 //smeagol r|reload|u|unload - reloads/unloads Smeagol.  
 
-**Changelog:**
+**Changelog:**  
 - 0.5.0 - Rewrote ring check function to not overwrite CP buff when switching to a sub level 99 job.  
           Reduced reliance on resources as an attempt to reduce memory usage.
 - 0.4.0 - Added Endorsement Ring and a check for logged in status.  
