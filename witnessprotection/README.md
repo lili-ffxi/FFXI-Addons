@@ -1,38 +1,33 @@
-# Witness Protection ver. 0.0.10
+# Witness Protection ver. 0.1.0
 
-This addon takes care of renaming all the characters you encounter to random names. The goal is to anonymize the screen to make it impossible, or at least very difficult, to recognize who you are or what server you are on by watching a video or a stream.
+This addon takes care of renaming all the characters you encounter to random names. The goal is to make it impossible, or at least very difficult, to recognize who you are or what server you are on by watching a video or a stream.
 
 Potentially useful for, well, streamers or videomakers that want to mantain partial anonymity on the internet. Probably useful for other things but I'll leave that up to you to find. It was also quite fun to write.
 
-**IMPORTANT:** witness protection is still very much incomplete. It should not break anything but there might be a few hiccups. Please report them by posting in this thread, thanks!
+**Changelog:**
+-  0.1.0 - Added persistent random names and colors for Linkshells, improved caching of names, revamped code significantly.  
+- 0.0.11 - testing ls colors  
+- 0.0.10 - added incoming /check notifications and improved generation of names  
+-  0.0.9 - correctly assigns name lengths  
+-  0.0.8 - switched from Index to ID  
+-  0.0.7 - first public release  
 
-Changelog:
-- 0.0.10 - added incoming /check notifications and improved generation of names
--  0.0.9 - correctly assigns name lengths
--  0.0.8 - switched from Index to ID
--  0.0.7 - first public release
+**How does it work:**  
+It reassign names both to characters that show up on screen, and to names in chat (party, linkshell, /say, /yell, etc). Also assigns a random new color and name to any linkshell you come across, both on screen and in chat log. All reassignments are cached and are persistent during each session, but are reset if you close the game or reload the addon.  
+The random names are made from the player Index, and for this reason permanent names are only assigned once somebody shows up on your screen. People that you haven't met yet will be "Anonabcd", where "abcd" is a random four letter string. I figure 9999 possibilities are enough with the current state of the game.
 
-**How does it work:**
-It reassign names both to characters that show up on screen, and to names in chat (party, linkshell, /say, /yell, etc). Names are cached and are persistent during each session, but are reset if you close the game or reload the addon.  
-The random names are made from the player Index, and for this reason permanent names are only assigned once somebody shows up on your screen. People that you haven't met yet will be "Anon123", where 123 changes randomly.  
-For testing purposes, the command `//wit` will print the name cache to the chatlog.
+For testing purposes, the command `//wit` will dump the entire cache to the chatlog. Careful, it might get long.
 
-Due to the name cache, if you receive a /tell from somebody, replying to their name *will* make the message arrive to the intended recipient!
+Names are assigned uniquely and biunivocally , so if you can send a /tell to a reassigned name and the proper recipient will receive it - this also makes it possible to reply to tells.
 
-Also due to the name cache, is possible to assign permanent renames to anybody you want. You can also de-anonymize yourself (or anybody) by simply assigning your own name to yourself.
+Also due to the name cache, it is possible to assign permanent renames to anybody you want. You can also de-anonymize yourself (or anybody) by simply assigning your own name to yourself.
 
-All the code in this has been written by me, but the original idea belong to [i]towbes[/i] from the Ashita discord, who is writing the exact same thing for Ashita.
+All the code in this has been written by me, but the original idea belong to *towbes* from the Ashita discord, who is writing the exact same thing for Ashita. Mine has more functionality tho :-P
 
 **Known issues:**  
-- ~~the length of the new name is capped at 4, 8, 12 or 16 characters, depending on the length of the original name. This seems to be a limitation of Windower. Working on it.~~ Fixed.  
-- LS messages become garbage. This is definitely a bug in Windower, and (I think) it has been reported.  
-- currently (and momentarily) does not anonymize names inside of Synthesis messages.  
+- none, but Synthesis messages are untested so use at your own risk.
 
-**To-do:**
-- fix the above.  
-- include and test Synthesis messages.  
-- write a better readme.  
-- randomize linkpearl colors  
+**To-do:**  
 - maybe randomize character race and/or face  
 - not sure what else.  
 
