@@ -1,4 +1,4 @@
-* Smeagol: automatically uses XP or CP rings.
+# Smeagol: automatically uses XP or CP rings.
 
 https://www.ffxiah.com/forum/topic/53244/smeagol-automatically-use-xpcp-rings/
 
