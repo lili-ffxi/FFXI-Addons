@@ -14,7 +14,7 @@ Potentially useful for, well, streamers or videomakers that want to mantain part
 
 **How does it work:**  
 It reassign names both to characters that show up on screen, and to names in chat (party, linkshell, /say, /yell, etc). Also assigns a random new color and name to any linkshell you come across, both on screen and in chat log. All reassignments are cached and are persistent during each session, but are reset if you close the game or reload the addon.  
-The random names are made from the player Index, and for this reason permanent names are only assigned once somebody shows up on your screen. People that you haven't met yet will be "Anonabcd", where "abcd" is a random four letter string. I figure 9999 possibilities are enough with the current state of the game.
+The random names are made from the player Id, and for this reason permanent names are only assigned once somebody shows up on your screen. People that you haven't met yet will be "Anonabcd", where "abcd" is a random four letter string. I figure 9999 possibilities are enough with the current state of the game.
 
 For testing purposes, the command `//wit` will dump the entire cache to the chatlog. Careful, it might get long.
 
