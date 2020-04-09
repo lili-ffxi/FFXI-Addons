@@ -22,10 +22,11 @@ Names are assigned uniquely and biunivocally , so if you can send a /tell to a r
 
 Also due to the name cache, it is possible to assign permanent renames to anybody you want. You can also de-anonymize yourself (or anybody) by simply assigning your own name to yourself.
 
-All the code in this has been written by me, but the original idea belong to *towbes* from the Ashita discord, who is writing the exact same thing for Ashita. Mine has more functionality tho :-P
+All the code in this has been written by me, but the original idea belong to *towbes* from the Ashita discord, who is writing the exact same thing for Ashita.
 
 **Known issues:**  
-- none, but Synthesis messages are untested so use at your own risk.
+- LS names can be garbage, this is due to a quirk of Windower which will be fixed soon. If it happens to you, just wait for the next Windower update.
+- Synthesis messages are untested so use at your own risk.
 
 **To-do:**  
 - maybe randomize character race and/or face  
