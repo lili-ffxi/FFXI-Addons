@@ -8,6 +8,6 @@ function trunc(n) return math.floor(n*100)/100 end
 windower.register_event('mouse',function(type,x,y,delta,blocked)
     if type == 1 then
         local player = windower.ffxi.get_mob_by_target('<me>')
-        windower.add_to_chat(158,'%s pos: %s %s':format(player.name,trunc(player.x),trunc(player.y)))
+        windower.add_to_chat(207,'%s pos: %s %s':format(player.name,trunc(player.x),trunc(player.y)))
     end
 end)
