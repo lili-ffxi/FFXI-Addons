@@ -1,5 +1,5 @@
 --[[
-Copyright © Lili, 2019
+Copyright © Lili, 2019-2020
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -28,7 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 _addon.name = 'Smeagol'
 _addon.author = 'Lili'
-_addon.version = '0.5.0'
+_addon.version = '0.6.0'
 _addon.commands = {'smeagol','sm'}
 
 require('logger')
@@ -43,9 +43,9 @@ cp_rings = T{'Guide Beret','Trizek Ring','Endorsement Ring','Facility Ring','Cap
 
 -- set your preferences here
 function init() 
-	override = 'no'
-	cycle_time = 4
-	start()
+    override = 'no'
+    cycle_time = 4
+    start:schedule(8)
 end
 
 -------------------------------------------------------------------------------
@@ -57,8 +57,8 @@ active = false
 busy = false
 
 buff_id = {
-	['Commitment'] = 579, --res_buffs:with('en','Commitment').id,
-	['Dedication'] = 249, --res_buffs:with('en','Dedication').id,
+    ['Commitment'] = 579, --res_buffs:with('en','Commitment').id,
+    ['Dedication'] = 249, --res_buffs:with('en','Dedication').id,
 }
 
 -- Having this here makes the addon use less ram than using the resources lib.
@@ -88,82 +88,82 @@ item_resources = T{
 }
 
 function get_item_info(items)
-	local results = {}
-	for i,v in ipairs(items) do
-		local item = item_resources:with('en', v) -- TODO: expand to check for long and jp text.
-		if item and item.id > 0 then 
-			results[i] = { ['id'] = item.id, ['slot'] = item.slots == 16 and 4 or 13,
-				['english'] = '"'..item.en..'"', ['japanese'] = item.ja,
-			}
-		end
-	end
-	return(results)
+    local results = {}
+    for i,v in ipairs(items) do
+        local item = item_resources:with('en', v) -- TODO: expand to check for long and jp text.
+        if item and item.id > 0 then 
+            results[i] = { ['id'] = item.id, ['slot'] = item.slots == 16 and 4 or 13,
+                ['english'] = '"'..item.en..'"', ['japanese'] = item.ja,
+            }
+        end
+    end
+    return(results)
 end
 
 xp_rings_info = get_item_info(xp_rings)
 cp_rings_info = get_item_info(cp_rings)
 
 function start()
-	if not active then 
-		active = check_exp_buffs:loop(cycle_time)
-	end
+    if not active then 
+        active = check_exp_buffs:loop(cycle_time)
+    end
 end
 
 function stop()
-	if active then
-		coroutine.close(active)
-		active = false
-	end
+    if active then
+        coroutine.close(active)
+        active = false
+    end
 end
 
 function gs_disable_slot(slot)
-	windower.send_command('gs disable '..res_slots[slot].en:gsub(' ','_'))
+    windower.send_command('gs disable '..res_slots[slot].en:gsub(' ','_'))
 end
 
 function gs_enable_slot(slot)
-	windower.send_command('gs enable '..res_slots[slot].en:gsub(' ','_'))
+    windower.send_command('gs enable '..res_slots[slot].en:gsub(' ','_'))
 end
 
 function check_exp_buffs()
     if not windower.ffxi.get_info().logged_in then return end
-	if busy then return end
-	if windower.ffxi.get_info().mog_house then return end
-	--PH: town check
-	
-	local player = windower.ffxi.get_player()
-	
-	if not (player.status == 0 or player.status == 1) then return end
-	
-	-- detect ring buffs
-	local xp_buff = 0
-	local cp_buff = 0
-	
-	for _,v in ipairs(player.buffs) do
-		if v == buff_id['Dedication'] then
-			xp_buff = xp_buff +1
-		elseif v == buff_id['Commitment'] then
-			cp_buff = cp_buff +1
-		end
-	end
-	
-	-- account for Kupofried trust
-	if xp_buff > 0 then
-		local party = windower.ffxi.get_party()
-		for i = 1,5 do
-			local member = party['p' .. i]
-			if member and member.name == 'Kupofried' then 
-				xp_buff = xp_buff -1
-			end
-		end
-	end
+    if busy then return end
+    if windower.ffxi.get_info().mog_house then return end
+    --PH: town check
+    
+    local player = windower.ffxi.get_player()
+    
+    if not (player.status == 0 or player.status == 1) then return end
+    
+    -- detect ring buffs
+    local xp_buff = 0
+    local cp_buff = 0
+    
+    for _,v in ipairs(player.buffs) do
+        if v == buff_id['Dedication'] then
+            xp_buff = xp_buff +1
+        elseif v == buff_id['Commitment'] then
+            cp_buff = cp_buff +1
+        end
+    end
+    
+    -- account for Kupofried trust
+    if xp_buff > 0 then
+        local party = windower.ffxi.get_party()
+        for i = 1,5 do
+            local member = party['p' .. i]
+            if member and member.name == 'Kupofried' then 
+                xp_buff = xp_buff -1
+            end
+        end
+    end
 
-	if xp_buff < 1 and cp_buff < 1 then
-		if override == 'xp' or (player.main_job_level < 99 and override ~= 'cp') then
-			search_rings(xp_rings_info)
-		else
-			search_rings(cp_rings_info)
-		end
-	end
+    if xp_buff < 1 and cp_buff < 1 then
+        if override == 'xp' or (player.main_job_level < 99 and override ~= 'cp') then
+            search_rings(xp_rings_info)
+        else
+            search_rings(cp_rings_info)
+        end
+    end
 end
 
 function search_rings(item_info) -- thanks to from20020516, this code is from MyHome addon with some modifications.
@@ -178,7 +178,7 @@ function search_rings(item_info) -- thanks to from20020516, this code is from My
             end
         end
     end
-	local min_recast = false
+    local min_recast = false
     for index,stats in pairs(item_info) do
         local item = item_array[stats.id]
         local set_equip = windower.ffxi.set_equip
@@ -187,26 +187,26 @@ function search_rings(item_info) -- thanks to from20020516, this code is from My
             local enchant = ext.type == 'Enchanted Equipment'
             local recast = enchant and ext.charges_remaining > 0 and math.max(ext.next_use_time+18000-os.time(),0)
             local usable = recast and recast == 0
-			if usable then 
-				log(stats[lang])
-			elseif recast then 
-				log(stats[lang],recast .. ' sec recast.')
-				if not min_recast or recast < min_recast then 
-					min_recast = recast 
-				end
-			end
+            if usable then 
+                log(stats[lang])
+            elseif recast then 
+                log(stats[lang],recast .. ' sec recast.')
+                if not min_recast or recast < min_recast then 
+                    min_recast = recast 
+                end
+            end
             if usable then
-				gs_disable_slot(stats.slot)
-				busy = true
-				if enchant and item.status ~= 5 then --not equipped
+                gs_disable_slot(stats.slot)
+                busy = true
+                if enchant and item.status ~= 5 then --not equipped
                     set_equip(item.slot,stats.slot,item.bag)
                     log_flag = true
-					local timeout = 0
+                    local timeout = 0
                     repeat --waiting cast delay
                         coroutine.sleep(1)
                         local ext = extdata.decode(get_items(item.bag,item.slot))
                         local delay = ext.activation_time+18000-os.time()
-						timeout = timeout +1
+                        timeout = timeout +1
                         if delay > 0 then
                             log(stats[lang],delay)
                         elseif log_flag then
@@ -215,48 +215,48 @@ function search_rings(item_info) -- thanks to from20020516, this code is from My
                         end
                     until ext.usable or delay > 15 or timeout > 30
                 end
-                windower.chat.input('/item '..windower.to_shift_jis(stats[lang])..' <me>')
-				coroutine.sleep(2)
-				busy = false
-				gs_enable_slot(stats.slot)
-				min_recast = false
-                break
-			end
+            windower.chat.input('/item '..windower.to_shift_jis(stats[lang])..' <me>')
+            coroutine.sleep(2)
+            busy = false
+            gs_enable_slot(stats.slot)
+            min_recast = false
+            break
+            end
         end
     end
-	if min_recast then
-		stop()
-		start:schedule(min_recast)
-		log('All rings on recast. Sleeping for',min_recast,'seconds.')
-	end
+    if min_recast then
+        stop()
+        start:schedule(min_recast)
+        log('All rings on recast. Sleeping for',min_recast,'seconds.')
+    end
 end
 
 windower.register_event('addon command',function(cmd)
-	if cmd == 'reload' or cmd == 'r' then
-		windower.send_command('lua reload smeagol')
-	elseif cmd == 'unload' or cmd == 'u' then
-		windower.send_command('lua unload smeagol')
-	elseif cmd == 'on' or cmd == 'start' then
-		log('Starting.')
-		start()
-	elseif cmd == 'off' or cmd == 'stop' then
-		log('Stopping.')
-		stop()
-	elseif cmd == 'xp' or cmd == 'cp' or cmd == 'normal' then
-		override = cmd:sub(1,2)
-		log('Override mode set to',cmd:upper())
-	elseif tonumber(cmd) and tonumber(cmd) < 300 and tonumber(cmd) > 0 then
-		cycle_time = cmd
-		log('Delay between checks set to',cmd,'seconds.')
-	elseif cmd == 'check' then
-		stop()
-		start()
-		log('Checking for new available rings...')
-	elseif cmd == 'reset' then
-		stop()
-		init()
-		log('Override disabled and delay between checks reset to',cycle_time,'seconds. Restarting.')
-	end
+    if cmd == 'reload' or cmd == 'r' then
+        windower.send_command('lua reload smeagol')
+    elseif cmd == 'unload' or cmd == 'u' then
+        windower.send_command('lua unload smeagol')
+    elseif cmd == 'on' or cmd == 'start' then
+        log('Starting.')
+        start()
+    elseif cmd == 'off' or cmd == 'stop' then
+        log('Stopping.')
+        stop()
+    elseif cmd == 'xp' or cmd == 'cp' or cmd == 'normal' then
+        override = cmd:sub(1,2)
+        log('Override mode set to',cmd:upper())
+    elseif tonumber(cmd) and tonumber(cmd) < 300 and tonumber(cmd) > 0 then
+        cycle_time = cmd
+        log('Delay between checks set to',cmd,'seconds.')
+    elseif cmd == 'check' then
+        stop()
+        start()
+        log('Checking for new available rings...')
+    elseif cmd == 'reset' then
+        stop()
+        init()
+        log('Override disabled and delay between checks reset to',cycle_time,'seconds. Restarting.')
+    end
 end)
 
 init()
