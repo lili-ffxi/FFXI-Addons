@@ -15,6 +15,7 @@ being used, put it in any other bag.
 //smeagol r|reload|u|unload - reloads/unloads Smeagol.  
 
 ### Changelog:
+- 0.6.0 - Added a delay on load, so there's time to set override manually before it attempts to use the first ring.
 - 0.5.0 - Rewrote ring check function to not overwrite CP buff when switching to a sub level 99 job.  
           Reduced reliance on resources as an attempt to reduce memory usage.
 - 0.4.0 - Added Endorsement Ring and a check for logged in status.  
