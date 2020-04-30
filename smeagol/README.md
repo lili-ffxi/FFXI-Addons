@@ -8,8 +8,8 @@ Rings need to be in Inventory, or Wardrobe 1-4. If you want to keep a ring from 
 ### Available commands:
 | Command | |
 |---|---|
-|//smeagol on|start|off|stop | starts or stops Smeagol.|  
-|//smeagol xp|all|normal | changes how Smeagol chooses the ring to use at level 99.|  
+|//smeagol on\|start\|off\|stop | starts or stops Smeagol.|  
+|//smeagol xp\|all\|normal | changes how Smeagol chooses the ring to use at level 99.|  
 ||                          `xp` will force use of XP rings even at level 99.|  
 ||                          `all` will prioritize CP rings, but will also use XP rings if they're available.|  
 ||                          `normal` will only use XP rings levels below 99, and only CP rings at level 99.|  
