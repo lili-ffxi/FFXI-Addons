@@ -28,7 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 _addon.name = 'Smeagol'
 _addon.author = 'Lili'
-_addon.version = '1.0.0'
+_addon.version = '1.0.1'
 _addon.commands = {'smeagol','sm'}
 
 require('logger')
@@ -44,7 +44,7 @@ cp_rings = T{'Guide Beret','Trizek Ring','Endorsement Ring','Facility Ring','Cap
 
 -- set your preferences here
 function init() 
-    override = 'no' -- 'no','xp','al'
+    override = 'no' -- 'no','xp','bo'
     cycle_time = 4
     use_in_town = 'no' -- 'no', 'yes'
     start:schedule(8)
@@ -178,14 +178,14 @@ function check_exp_buffs(option)
     end
 
     if xp_buff < 1 and cp_buff < 1 then
-        if player.main_job_level < 99 or override == 'xp' then         --TODO: check if we're capped on JP        
-            search_rings(xp_rings_info)
-        elseif override == 'al' then
-            local all_rings = cp_rings_info:extend(xp_rings_info)
-            search_rings(all_rings)
-        else
-            search_rings(cp_rings_info)
+        local rings = T{}
+        if player.main_job_level == 99 and override ~= 'xp' then
+            rings:extend(cp_rings_info)
         end
+        if player.main_job_level < 99 or override == 'bo' or override == 'xp' then
+            rings:extend(xp_rings_info)
+        end
+        search_rings(rings)        
     end
 end
 
@@ -266,9 +266,9 @@ windower.register_event('addon command',function(cmd,opt)
     elseif cmd == 'off' or cmd == 'stop' then
         log('Stopping.')
         stop()
-    elseif cmd == 'xp' or cmd == 'all' or cmd == 'normal' then
+    elseif cmd == 'xp' or cmd == 'both' or cmd == 'normal' then
         override = cmd:sub(1,2)
-        log('Override mode set to %s':format(cmd:upper()))
+        log('Override mode set to %s.':format(cmd:upper()))
     elseif tonumber(cmd) and tonumber(cmd) < 300 and tonumber(cmd) > 0 then
         cycle_time = cmd
         log('Delay between checks set to %s seconds.':format(cmd))
