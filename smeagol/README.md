@@ -3,18 +3,24 @@
 https://www.ffxiah.com/forum/topic/53244/smeagol-automatically-use-xpcp-rings/
 
 Smeagol will use CP rings at level 99, or XP rings at any level below 99.
-Rings need to be in Inventory, or Wardrobe 1-4. If you want to keep a ring from
-being used, put it in any other bag.
+Rings need to be in Inventory, or Wardrobe 1-4. If you want to keep a ring from being used, put it in any other bag.
 
 ### Commands:
 //smeagol on|start|off|stop - starts or stops Smeagol.  
-//smeagol xp|cp|normal - forces the choice of xp/cp rings regardless of level, or disables override.  
+//smeagol xp|all|normal - changes how Smeagol chooses the ring to use at level 99.  
+                          `xp` will force use of XP rings even at level 99.  
+                          `all` will prioritize CP rings, but will also use XP rings if they're available.  
+                          `normal` will only use XP rings levels below 99, and only CP rings at level 99.  
+                           Default is Normal.  
 //smeagol <number> - how often Smeagol should check if an exp buff is active, in seconds. Default is 4.  
 //smeagol check - come out of sleep and check for usable rings.  
 //smeagol reset - restores default settings.  
+//smeagol town - toggles use of rings while in town. Default is no.
 //smeagol r|reload|u|unload - reloads/unloads Smeagol.  
 
 ### Changelog:
+- 1.0.1 - Minor code tweak.
+- 1.0.0 - Breaking changes: removed CP override. Added town check and related command.
 - 0.6.0 - Added a delay on load, so there's time to set override manually before it attempts to use the first ring.
 - 0.5.0 - Rewrote ring check function to not overwrite CP buff when switching to a sub level 99 job.  
           Reduced reliance on resources as an attempt to reduce memory usage.
