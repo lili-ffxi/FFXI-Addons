@@ -28,13 +28,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 _addon.name = 'Smeagol'
 _addon.author = 'Lili'
-_addon.version = '0.6.0'
+_addon.version = '1.0.0'
 _addon.commands = {'smeagol','sm'}
 
 require('logger')
 require('tables')
 extdata = require('extdata')
 res_slots = require('resources').slots
+res_zones = require('resources').zones
 --res_buffs = require('resources').buffs -- tentatively removed
 
 -- Adjust the rings you want to use here. Case sensitive.
@@ -43,8 +44,9 @@ cp_rings = T{'Guide Beret','Trizek Ring','Endorsement Ring','Facility Ring','Cap
 
 -- set your preferences here
 function init() 
-    override = 'no'
+    override = 'no' -- 'no','xp','al'
     cycle_time = 4
+    use_in_town = 'no' -- 'no', 'yes'
     start:schedule(8)
 end
 
@@ -61,7 +63,7 @@ buff_id = {
     ['Dedication'] = 249, --res_buffs:with('en','Dedication').id,
 }
 
--- Having this here makes the addon use less ram than using the resources lib.
+-- Having this here makes the addon use less ram than using the resources lib... maybe.
 
 item_resources = T{
     [10796] = {id=10796,en="Decennial Ring",ja="デセニアルリング",enl="decennial ring",jal="デセニアルリング",cast_delay=15,cast_time=3,category="Armor",flags=64576,jobs=8388606,level=1,max_charges=10,races=510,recast_delay=3600,slots=24576,stack=1,targets=1,type=5},
@@ -87,6 +89,21 @@ item_resources = T{
     [28546] = {id=28546,en="Capacity Ring",ja="キャパシティリング",enl="capacity ring",jal="キャパシティリング",cast_delay=5,cast_time=1,category="Armor",flags=64580,jobs=8388606,level=99,max_charges=7,races=510,recast_delay=900,slots=24576,stack=1,targets=1,type=5},
 }
 
+-- Some of those 
+cities = T{  "Northern San d'Oria", "Southern San d'Oria", "Port San d'Oria", "Chateau d'Oraguille",
+            "Bastok Markets", "Bastok Mines", "Port Bastok", "Metalworks",
+            "Windurst Walls", "Windurst Waters", "Windurst Woods", "Port Windurst", "Heavens Tower",
+            "Ru'Lude Gardens", "Upper Jeuno", "Lower Jeuno", "Port Jeuno",
+            "Selbina", "Mhaura", "Kazham", "Norg", "Rabao", "Tavnazian Safehold",
+            "Aht Urhgan Whitegate", "Al Zahbi", "Nashmau",
+            "Southern San d'Oria (S)", "Bastok Markets (S)", "Windurst Waters (S)",
+            "Walk of Echoes", "Provenance",
+            "Western Adoulin", "Eastern Adoulin", "Celennia Memorial Library",
+            "Bastok-Jeuno Airship", "Kazham-Jeuno Airship", "San d'Oria-Jeuno Airship", "Windurst-Jeuno Airship",
+            "Ship bound for Mhaura", "Ship bound for Selbina", "Open sea route to Al Zahbi", "Open sea route to Mhaura",
+            "Silver Sea route to Al Zahbi", "Silver Sea route to Nashmau", "Manaclipper", "Phanauet Channel",
+            "Chocobo Circuit", "Feretory", "Mog Garden", }
+
 function get_item_info(items)
     local results = {}
     for i,v in ipairs(items) do
@@ -97,7 +114,7 @@ function get_item_info(items)
             }
         end
     end
-    return(results)
+    return T(results)
 end
 
 xp_rings_info = get_item_info(xp_rings)
@@ -124,11 +141,14 @@ function gs_enable_slot(slot)
     windower.send_command('gs enable '..res_slots[slot].en:gsub(' ','_'))
 end
 
-function check_exp_buffs()
-    if not windower.ffxi.get_info().logged_in then return end
-    if busy then return end
-    if windower.ffxi.get_info().mog_house then return end
-    --PH: town check
+function check_exp_buffs(option)
+    if (not windower.ffxi.get_info().logged_in
+        or busy
+        or windower.ffxi.get_info().mog_house
+        or (cities:contains(res_zones[windower.ffxi.get_info().zone].english)) and use_in_town ~= 'yes') --TODO: make this optional
+        then
+            return
+    end
     
     local player = windower.ffxi.get_player()
     
@@ -158,8 +178,11 @@ function check_exp_buffs()
     end
 
     if xp_buff < 1 and cp_buff < 1 then
-        if override == 'xp' or (player.main_job_level < 99 and override ~= 'cp') then
+        if player.main_job_level < 99 or override == 'xp' then         --TODO: check if we're capped on JP        
             search_rings(xp_rings_info)
+        elseif override == 'al' then
+            local all_rings = cp_rings_info:extend(xp_rings_info)
+            search_rings(all_rings)
         else
             search_rings(cp_rings_info)
         end
@@ -231,7 +254,8 @@ function search_rings(item_info) -- thanks to from20020516, this code is from My
     end
 end
 
-windower.register_event('addon command',function(cmd)
+windower.register_event('addon command',function(cmd,opt)
+    local cmd = cmd:lower()
     if cmd == 'reload' or cmd == 'r' then
         windower.send_command('lua reload smeagol')
     elseif cmd == 'unload' or cmd == 'u' then
@@ -242,12 +266,15 @@ windower.register_event('addon command',function(cmd)
     elseif cmd == 'off' or cmd == 'stop' then
         log('Stopping.')
         stop()
-    elseif cmd == 'xp' or cmd == 'cp' or cmd == 'normal' then
+    elseif cmd == 'xp' or cmd == 'all' or cmd == 'normal' then
         override = cmd:sub(1,2)
-        log('Override mode set to',cmd:upper())
+        log('Override mode set to %s':format(cmd:upper()))
     elseif tonumber(cmd) and tonumber(cmd) < 300 and tonumber(cmd) > 0 then
         cycle_time = cmd
-        log('Delay between checks set to',cmd,'seconds.')
+        log('Delay between checks set to %s seconds.':format(cmd))
+    elseif cmd == 'town' then
+        use_in_town = use_in_town == 'no' and 'yes' or 'no'
+        log('Rings %s be used in town.':format(use_in_town == 'yes' and 'will' or 'will not'))
     elseif cmd == 'check' then
         stop()
         start()
@@ -255,7 +282,9 @@ windower.register_event('addon command',function(cmd)
     elseif cmd == 'reset' then
         stop()
         init()
-        log('Override disabled and delay between checks reset to',cycle_time,'seconds. Restarting.')
+        log('Override disabled and delay between checks reset to %s seconds. Restarting.':format(cycle_time))
+    elseif cmd == 'help' then
+        log('Go to ffxiah.com and search for \'smeagol\' to get help.')
     end
 end)
 
