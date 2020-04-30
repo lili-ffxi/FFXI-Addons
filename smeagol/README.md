@@ -6,14 +6,14 @@ Smeagol will use CP rings at level 99, or XP rings at any level below 99.
 Rings need to be in Inventory, or Wardrobe 1-4. If you want to keep a ring from being used, put it in any other bag.
 
 ### Available commands:
-| Command | |
+| Command | Description |
 |---|---|
-|//smeagol on\|start\|off\|stop | starts or stops Smeagol.|  
-|//smeagol xp\|all\|normal | changes how Smeagol chooses the ring to use at level 99.|  
-||                          `xp` will force use of XP rings even at level 99.|  
-||                          `all` will prioritize CP rings, but will also use XP rings if they're available.|  
-||                          `normal` will only use XP rings levels below 99, and only CP rings at level 99.|  
-||                           Default is Normal.|  
+|//smeagol on\|start\|off\|stop | Starts or stops Smeagol.|  
+|//smeagol xp\|all\|normal | changes how Smeagol chooses the ring to use at level 99:\\
+`xp` will force use of XP rings even at level 99.\\
+`all` will prioritize CP rings, but will also use XP rings if they're available.\\
+`normal` will only use XP rings levels below 99, and only CP rings at level 99.\\
+||Default is Normal.|
 |//smeagol <number>| - how often Smeagol should check if an exp buff is active, in seconds. Default is 4.|  
 |//smeagol check| - come out of sleep and check for usable rings.|  
 |//smeagol reset| - restores default settings.|  
