@@ -9,16 +9,18 @@ Rings need to be in Inventory, or Wardrobe 1-4. If you want to keep a ring from 
 | Command | Description |
 |---|---|
 |//smeagol on\|start\|off\|stop | Starts or stops Smeagol.|  
-|//smeagol xp\|all\|normal | changes how Smeagol chooses the ring to use at level 99:\\
-`xp` will force use of XP rings even at level 99.\\
-`all` will prioritize CP rings, but will also use XP rings if they're available.\\
-`normal` will only use XP rings levels below 99, and only CP rings at level 99.\\
+|//smeagol xp\|all\|normal | changes how Smeagol chooses the ring to use at level 99:|
+||`xp` will force use of XP rings _only_, even at level 99.|
+||`both` will prioritize CP rings, but will also use XP rings if they're available.|
+||`normal` will only use XP rings levels below 99, and only CP rings at level 99.|
 ||Default is Normal.|
 |//smeagol <number>| - how often Smeagol should check if an exp buff is active, in seconds. Default is 4.|  
 |//smeagol check| - come out of sleep and check for usable rings.|  
 |//smeagol reset| - restores default settings.|  
 |//smeagol town| - toggles use of rings while in town. Default is no.|
 |//smeagol r|reload|u|unload| - reloads/unloads Smeagol.|  
+
+Settings are not saved. You can edit the preference table in the lua directly.
 
 ### Changelog:
 - 1.0.1 - Minor code tweak.
