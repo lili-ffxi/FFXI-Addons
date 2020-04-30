@@ -9,16 +9,17 @@ Rings need to be in Inventory, or Wardrobe 1-4. If you want to keep a ring from 
 | Command | Description |
 |---|---|
 |//smeagol on\|start\|off\|stop | Starts or stops Smeagol.|  
-|//smeagol xp\|all\|normal | changes how Smeagol chooses the ring to use at level 99:|
+|//smeagol xp\|all\|normal | Changes how Smeagol chooses the ring to use at level 99:|
 ||`xp` will force use of XP rings _only_, even at level 99.|
 ||`both` will prioritize CP rings, but will also use XP rings if they're available.|
 ||`normal` will only use XP rings levels below 99, and only CP rings at level 99.|
 ||Default is Normal.|
-|//smeagol <number>| - how often Smeagol should check if an exp buff is active, in seconds. Default is 4.|  
-|//smeagol check| - come out of sleep and check for usable rings.|  
-|//smeagol reset| - restores default settings.|  
-|//smeagol town| - toggles use of rings while in town. Default is no.|
-|//smeagol r|reload|u|unload| - reloads/unloads Smeagol.|  
+||Note: CP rings will only ever be used at level 99.|
+|//smeagol \<number\>| - How often Smeagol should check if an exp buff is active, in seconds. Default is 4.|  
+|//smeagol check| - Come out of sleep and check for usable rings.|  
+|//smeagol reset| - Restores default settings.|  
+|//smeagol town| - Toggles use of rings while in town. Default is no.|
+|//smeagol r|reload|u|unload| - Reloads/unloads Smeagol.|  
 
 Settings are not saved. You can edit the preference table in the lua directly.
 
@@ -36,6 +37,9 @@ Settings are not saved. You can edit the preference table in the lua directly.
 - 0.2.0 - Added checks for Mog House and Idle/Engaged status.  
 - 0.1.2 - Removed chatlog spam that occurred when all available rings were on recast, and other adjustments.  
 - 0.1.0 - Initial release.  
+
+### TO-DO ###
+- Check for point caps and potpourri buff, to not waste charges when capped.
 
 Thanks to Kale for his gearswap suite, Smeagol started with code from that.  
 thanks to from20020516, the code that check for ring cooldown is from him.  
