@@ -25,7 +25,7 @@ Settings are not saved. You can edit the preference table in the lua directly.
 
 ### Changelog:
 - 1.0.1 - Minor code tweak.
-- 1.0.0 - Breaking changes: removed CP override. Added town check and related command.
+- 1.0.0 - Breaking changes to the override logic. Added town check and related command.
 - 0.6.0 - Added a delay on load, so there's time to set override manually before it attempts to use the first ring.
 - 0.5.0 - Rewrote ring check function to not overwrite CP buff when switching to a sub level 99 job.  
           Reduced reliance on resources as an attempt to reduce memory usage.
