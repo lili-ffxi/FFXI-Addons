@@ -28,25 +28,29 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 _addon.name = 'Smeagol'
 _addon.author = 'Lili'
-_addon.version = '1.0.1'
+_addon.version = '1.1.0'
 _addon.commands = {'smeagol','sm'}
 
 require('logger')
 require('tables')
+require('pack')
+packets = require('packets')
 extdata = require('extdata')
 res_slots = require('resources').slots
 res_zones = require('resources').zones
 --res_buffs = require('resources').buffs -- tentatively removed
 
 -- Adjust the rings you want to use here. Case sensitive.
-xp_rings = T{'Sprout Beret','Echad Ring','Caliber Ring','Emperor Band', 'Empress Band', 'Chariot Band', 'Resolution Ring', 'Allied Ring', 'Kupofried\'s Ring'}
-cp_rings = T{'Guide Beret','Trizek Ring','Endorsement Ring','Facility Ring','Capacity Ring','Vocation Ring',}
+xp_rings = T{'Echad Ring','Caliber Ring','Emperor Band', 'Empress Band', 'Chariot Band', 'Resolution Ring', 'Allied Ring', 'Kupofried\'s Ring','Sprout Beret',}
+cp_rings = T{'Trizek Ring','Endorsement Ring','Facility Ring','Capacity Ring','Vocation Ring','Guide Beret',}
 
 -- set your preferences here
-function init() 
+function init()
     override = 'no' -- 'no','xp','bo'
     cycle_time = 4
     use_in_town = 'no' -- 'no', 'yes'
+    capped_jp = true        -- Assume capped JP and Merits, 
+    capped_merits = true    -- until a proper packet is detected.
     start:schedule(8)
 end
 
@@ -57,10 +61,12 @@ end
 lang = string.lower(windower.ffxi.get_info().language)
 active = false
 busy = false
+moving = false
 
 buff_id = {
     ['Commitment'] = 579, --res_buffs:with('en','Commitment').id,
     ['Dedication'] = 249, --res_buffs:with('en','Dedication').id,
+    ['Emporox\'s Gift'] = 618,
 }
 
 -- Having this here makes the addon use less ram than using the resources lib... maybe.
@@ -89,39 +95,76 @@ item_resources = T{
     [28546] = {id=28546,en="Capacity Ring",ja="キャパシティリング",enl="capacity ring",jal="キャパシティリング",cast_delay=5,cast_time=1,category="Armor",flags=64580,jobs=8388606,level=99,max_charges=7,races=510,recast_delay=900,slots=24576,stack=1,targets=1,type=5},
 }
 
--- Some of those 
-cities = T{  "Northern San d'Oria", "Southern San d'Oria", "Port San d'Oria", "Chateau d'Oraguille",
+function get_item_info(items)
+    local results = T{}
+    for i,v in ipairs(items) do
+        local item = item_resources:with('en', v) -- TODO: expand to check for long and jp text. Is jp text even needed?
+        if item and item.id > 0 then
+            results[i] = {
+                ['id'] = item.id,
+                ['slot'] = item.slots == 16 and 4 or 13,
+                ['english'] = '"'..item.en..'"',
+                ['japanese'] = item.ja,
+            }
+        end
+    end
+    return results
+end
+
+xp_rings_info = get_item_info(xp_rings)
+cp_rings_info = get_item_info(cp_rings)
+
+-- returns current zone
+local function get_zone()
+    return res_zones[windower.ffxi.get_info().zone].en
+end
+
+-- returns true if current zone is a city or town.
+local in_town = function()
+	local Cities = S{
+            "Northern San d'Oria", "Southern San d'Oria", "Port San d'Oria", "Chateau d'Oraguille",
             "Bastok Markets", "Bastok Mines", "Port Bastok", "Metalworks",
             "Windurst Walls", "Windurst Waters", "Windurst Woods", "Port Windurst", "Heavens Tower",
             "Ru'Lude Gardens", "Upper Jeuno", "Lower Jeuno", "Port Jeuno",
             "Selbina", "Mhaura", "Kazham", "Norg", "Rabao", "Tavnazian Safehold",
             "Aht Urhgan Whitegate", "Al Zahbi", "Nashmau",
             "Southern San d'Oria (S)", "Bastok Markets (S)", "Windurst Waters (S)",
-            "Walk of Echoes", "Provenance",
+            -- "Walk of Echoes", "Provenance", -- YMMV
             "Western Adoulin", "Eastern Adoulin", "Celennia Memorial Library",
             "Bastok-Jeuno Airship", "Kazham-Jeuno Airship", "San d'Oria-Jeuno Airship", "Windurst-Jeuno Airship",
             "Ship bound for Mhaura", "Ship bound for Selbina", "Open sea route to Al Zahbi", "Open sea route to Mhaura",
             "Silver Sea route to Al Zahbi", "Silver Sea route to Nashmau", "Manaclipper", "Phanauet Channel",
-            "Chocobo Circuit", "Feretory", "Mog Garden", }
-
-function get_item_info(items)
-    local results = {}
-    for i,v in ipairs(items) do
-        local item = item_resources:with('en', v) -- TODO: expand to check for long and jp text.
-        if item and item.id > 0 then 
-            results[i] = { ['id'] = item.id, ['slot'] = item.slots == 16 and 4 or 13,
-                ['english'] = '"'..item.en..'"', ['japanese'] = item.ja,
+            "Chocobo Circuit", "Feretory", "Mog Garden",
             }
+    return function()
+        if Cities:contains(get_zone()) then
+            return true
         end
+        return false
     end
-    return T(results)
+end()
+
+-- returns a string with human readable time.
+local time2human = function(seconds,period)
+    local response = ''
+    if seconds > 86400 then 
+        response = 'more than a day'
+    else
+        local h = math.floor(seconds/3600)
+        local m = math.floor(seconds%3600/60)
+        local s = seconds%60
+
+        if h > 0 then response = '%s hour%s':format(h,h > 1 and 's' or '') end
+        if h > 0 and m > 0 then response = response .. ' and ' end
+        if m > 0 then response = response .. '%s minute%s':format(m,m > 1 and 's' or '') end
+        if h+m < 1 then response = '%s seconds':format(s) end
+    end
+    
+    return response .. (period and '.' or '')
 end
 
-xp_rings_info = get_item_info(xp_rings)
-cp_rings_info = get_item_info(cp_rings)
-
 function start()
-    if not active then 
+    if not active then
         active = check_exp_buffs:loop(cycle_time)
     end
 end
@@ -141,37 +184,58 @@ function gs_enable_slot(slot)
     windower.send_command('gs enable '..res_slots[slot].en:gsub(' ','_'))
 end
 
-function check_exp_buffs(option)
-    if (not windower.ffxi.get_info().logged_in
-        or busy
-        or windower.ffxi.get_info().mog_house
-        or (cities:contains(res_zones[windower.ffxi.get_info().zone].english)) and use_in_town ~= 'yes') --TODO: make this optional
-        then
-            return
+function my_preciouss() -- not very semantic but the ring will do that to you
+    if not windower.ffxi.get_info().logged_in then
+        return false
     end
-    
-    local player = windower.ffxi.get_player()
-    
-    if not (player.status == 0 or player.status == 1) then return end
-    
+
+    if busy or moving then
+        return false
+    end
+
+    if in_town() and use_in_town == 'no' then
+        return false
+    end
+
+    if windower.ffxi.get_info().mog_house then
+        return false
+    end
+
+    if windower.ffxi.get_player().status > 1 then
+        return false
+    end
+
+    return true
+end
+
+function check_exp_buffs(option)
+
+    if not my_preciouss() then
+        return
+    end
+
     -- detect ring buffs
     local xp_buff = 0
     local cp_buff = 0
-    
+    local capped_merits = capped_merits
+
+    local player = windower.ffxi.get_player()
     for _,v in ipairs(player.buffs) do
         if v == buff_id['Dedication'] then
             xp_buff = xp_buff +1
         elseif v == buff_id['Commitment'] then
             cp_buff = cp_buff +1
+        elseif v == buff_id['Emporox\'s Gift'] then
+            capped_merits = false
         end
     end
-    
+
     -- account for Kupofried trust
     if xp_buff > 0 then
         local party = windower.ffxi.get_party()
         for i = 1,5 do
             local member = party['p' .. i]
-            if member and member.name == 'Kupofried' then 
+            if member and member.name == 'Kupofried' then
                 xp_buff = xp_buff -1
             end
         end
@@ -179,13 +243,13 @@ function check_exp_buffs(option)
 
     if xp_buff < 1 and cp_buff < 1 then
         local rings = T{}
-        if player.main_job_level == 99 and override ~= 'xp' then
+        if (player.main_job_level == 99 and override ~= 'xp') and not capped_jp then
             rings:extend(cp_rings_info)
         end
-        if player.main_job_level < 99 or override == 'bo' or override == 'xp' then
+        if (player.main_job_level < 99 or override == 'bo' or override == 'xp') and not capped_merits then
             rings:extend(xp_rings_info)
         end
-        search_rings(rings)        
+        search_rings(rings)
     end
 end
 
@@ -210,12 +274,12 @@ function search_rings(item_info) -- thanks to from20020516, this code is from My
             local enchant = ext.type == 'Enchanted Equipment'
             local recast = enchant and ext.charges_remaining > 0 and math.max(ext.next_use_time+18000-os.time(),0)
             local usable = recast and recast == 0
-            if usable then 
+            if usable then
                 log(stats[lang])
-            elseif recast then 
-                log(stats[lang],recast .. ' sec recast.')
-                if not min_recast or recast < min_recast then 
-                    min_recast = recast 
+            elseif recast then
+                log(stats[lang],time2human(recast,true))
+                if not min_recast or recast < min_recast then
+                    min_recast = recast
                 end
             end
             if usable then
@@ -250,9 +314,51 @@ function search_rings(item_info) -- thanks to from20020516, this code is from My
     if min_recast then
         stop()
         start:schedule(min_recast)
-        log('All rings on recast. Sleeping for',min_recast,'seconds.')
+        log('All rings on recast. Sleeping for',time2human(min_recast,true))
     end
 end
+
+windower.register_event('incoming chunk',function(id,data)
+    if id ~= 0x63 then
+        return
+    end
+
+    -- thanks Byrth, this is verbatim from Pointwatch.
+    if data:byte(5) == 5 then
+        local offset = windower.ffxi.get_player().main_job_id*6+13 -- So WAR (ID==1) starts at byte 19
+        local jp_held = data:unpack('H',offset+2)
+        capped_jp = jp_held == 500
+    elseif data:byte(5) == 2 then
+        local merits_held = data:byte(11)%128
+        local maximum_merits = data:byte(0x0D)%128    
+        capped_merits = merits_held == maximum_merits
+    end
+end)
+
+windower.register_event('load', function()
+    if not windower.ffxi.get_info().logged_in then
+        return
+    end
+    
+    coroutine.sleep(0.5)
+    
+    -- opening equipment menu also gets current JP and Merits held.
+    local packet = packets.new('outgoing', 0x061, {}) 
+    packets.inject(packet)
+end)
+
+windower.register_event('outgoing chunk',function(id,data,modified,is_injected,is_blocked)
+    if id == 0x015 then
+        moving = lastlocation ~= modified:sub(5, 16)
+        lastlocation = modified:sub(5, 16)
+
+		-- if wasmoving ~= moving then
+			-- log(moving and 'moving' or 'stopped')
+		-- end
+
+		wasmoving = moving
+    end
+end)
 
 windower.register_event('addon command',function(cmd,opt)
     local cmd = cmd:lower()
@@ -279,6 +385,7 @@ windower.register_event('addon command',function(cmd,opt)
         stop()
         start()
         log('Checking for new available rings...')
+        log(capped_jp and 'JP are capped.' and '',capped_merits and 'Merits are capped' or '')
     elseif cmd == 'reset' then
         stop()
         init()
