@@ -24,7 +24,7 @@ Rings need to be in Inventory, or Wardrobe 1-4. If you want to keep a ring from 
 Settings are not yet saved. You can edit the preference table in the lua directly.
 
 ### Changelog:
-- 1.1.0 - Human readable times, added detection for capped JP/Merits.
+- 1.1.0 - Human readable times, added detection for capped JP/Merits, added movement check.
 - 1.0.1 - Minor code tweak.
 - 1.0.0 - Breaking changes to the override logic. Added town check and related command.
 - 0.6.0 - Added a delay on load, so there's time to set override manually before it attempts to use the first ring.
