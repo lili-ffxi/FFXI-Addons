@@ -32,7 +32,7 @@ require('logger')
 
 _addon.name = 'silttracker'
 _addon.author = 'Lili'
-_addon.version = '0.1.3'
+_addon.version = '0.3.0'
 _addon.command = 'strack'
 
 combat_buffs = S{ 276, 603 } -- calculate silt/beads gain after these buffs drop
@@ -79,6 +79,11 @@ function initialize()
     previous_silt = 0
     current_beads = 0
     previous_beads = 0
+    current_dp = 0
+    previous_dp = 0
+    total_dp = 0
+    daily_dp = 0
+    earned_dp = 0
     please_update = false
     update_on_zone = true
     first_check = true
@@ -88,6 +93,10 @@ function initialize()
 end
 
 function get_points()
+    if not windower.ffxi.get_info().logged_in then
+        return
+    end
+    
     local packet = packets.new('outgoing', 0x115, {})
     packets.inject(packet)
 end
@@ -96,35 +105,38 @@ initialize()
 
 windower.register_event('incoming chunk',function(id,org,modi,is_injected,is_blocked)
     if is_injected then return end
-    if id == 0x118 then
-        p = packets.parse('incoming',org)
-        current_silt = p["Escha Silt"]
-        current_beads = p["Escha Beads"]
+    if id ~= 0x118 then
+        return
+    end
+    
+    p = packets.parse('incoming',org)
+    current_silt = p["Escha Silt"]
+    current_beads = p["Escha Beads"]
 
-        if first_check then
-            earnings[#earnings+1] = string.format('Started with: %s silt and %s beads',current_silt,current_beads)
+    if first_check then
+        earnings[#earnings+1] = string.format('Started with: %s silt and %s beads',current_silt,current_beads)
+        previous_silt = current_silt
+        previous_beads = current_beads
+        first_check = false
+
+    elseif please_update then
+        local earned_silt = current_silt - previous_silt
+        local earned_beads = current_beads - previous_beads
+        
+        if earned_silt > 0 or earned_beads > 0 or earned_dp > 0 then
+            local now = os.date('%X')
+            local capped = current_beads == 50000 and ' (capped)' or ''
+            local di_points = earned_dp > 0 and ', %s DI points':format(earned_dp) or ''
+            earnings[#earnings+1] = '%s - Earned: %s silt, %s beads%s':format(now,earned_silt,earned_beads..capped,di_points)
             previous_silt = current_silt
             previous_beads = current_beads
-            first_check = false
-
-        elseif please_update then
-            local earned_silt = current_silt - previous_silt
-            local earned_beads = current_beads - previous_beads
-
-            if earned_silt > 0 or earned_beads > 0 then
-                local now = os.date('%X')
-                local capped = current_beads == 50000 and ' (capped)' or ''
-                earnings[#earnings+1] = string.format('%s - Earned: %s silt and %s beads',now,earned_silt,earned_beads)..capped
-                previous_silt = current_silt
-                previous_beads = current_beads
-            end
-
-            please_update = false
+            earned_dp = 0
         end
 
-        update_box()
-
+        please_update = false
     end
+
+    update_box()
 
 end)
 
@@ -137,20 +149,60 @@ windower.register_event('zone change',function(new,old)
 end)
 
 windower.register_event('lose buff', function(buff)
-    if buff == 276 or buff == 603 and escha_zones[windower.ffxi.get_info().zone] then
+    if buff == 276 and escha_zones[windower.ffxi.get_info().zone] then
         please_update = true
         coroutine.schedule(get_points,3)
     end
 end)
 
-windower.register_event('addon command',function(...)
-    local commands = {...}
-    local first_cmd = table.remove(commands,1):lower()
-    if first_cmd == 'reload' or first_cmd == 'r' then
+windower.register_event('incoming text',function(original,modified,original_mode,modified_mode)
+
+    -- 121 for yellow text "<name> obtained <number> Domain Points!"
+    -- 148 for white text "Domain Points Acquired: <number> <newline> Domain points Held: <number>"
+    local text,mode = modified, tonumber(original_mode)
+    
+    if mode ~= 121 and mode ~= 148 then
+        return
+    end
+
+    if string.find(text,_addon.name) or not string.find(text,'Domain Points') then
+        return
+    end
+    
+    local obtained = text:match('obtained (%d+)')
+    if obtained then
+        earned_dp = tonumber(obtained)
+    end
+    
+    local acquired = text:match('Acquired: (%d+)')
+    if acquired then
+        daily_dp = tonumber(acquired)
+    end
+    
+    local held = text:match('Held: (%d+)')
+    if held then
+        total_dp = tonumber(held)
+    end
+    
+    -- log('obtained:',obtained or '--','acquired:',acquired or '--','held:',held or '--')
+    
+end)
+
+windower.register_event('addon command',function(cmd,...)
+    if not cmd then
+        return
+    end
+    local args = {...}
+    if cmd == 'reload' or cmd == 'r' then
         windower.send_command('lua r silttracker')
-    elseif first_cmd == 'unload' or first_cmd == 'u' then
+    elseif cmd == 'unload' or cmd == 'u' then
         windower.send_command('lua u silttracker')
-    elseif first_cmd == 'reset' then
+    elseif cmd == 'check' or cmd == 'c' then
+        log('Manual check...')
+        please_update = true
+        get_points()
+    
+    elseif cmd == 'reset' then
         initialize()
     end
 end)
@@ -180,7 +232,11 @@ function update_box()
     end
 
     local now = os.date('%X')
+    local di_points = current_dp > 0 and ' - %s DI points':format(current_dp) or ''
     content = content .. string.format('%s - Current: %s silt - %s beads.',now,current_silt,current_beads)
+    if total_dp > 0 then
+        content = content .. string.format('\n     Domain Points: %s daily, %s total',daily_dp,total_dp)
+    end
 
     if box.content ~= content then
         box.content = content
