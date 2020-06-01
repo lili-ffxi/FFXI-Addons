@@ -1,5 +1,5 @@
 _addon.name = 'TPSreport'
-_addon.author = 'Lili, name courtesy of Lowclock'
+_addon.author = 'Lili'
 _addon.version = '0.0.1'
 _addon.command = 'tpsreport'
 
