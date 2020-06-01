@@ -66,7 +66,7 @@ windower.register_event('addon command',function(cmd)
     end
     
     if cmd == 'help' then
-        log('Load the addon before inviting people to the alliance, then when you're done and everybody is in zone input //tpsreport.')
+        log('Load the addon before inviting people to the alliance, then when you\'re done and everybody is in zone input //tpsreport.')
         log('A timestamped file will be created in the export folder.')
         return
     end
