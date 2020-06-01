@@ -1,6 +1,6 @@
 _addon.name = 'TPSreport'
 _addon.author = 'Lili'
-_addon.version = '0.0.1'
+_addon.version = '0.0.3'
 _addon.command = 'tpsreport'
 
 require('logger')
@@ -31,9 +31,8 @@ function get_members()
                     return false
                 end()
                 current_members[m.name] = {
-                        --['id'] = id or 'unknown',
                         ['job'] = job or function() 
-                                warning('Job unknown for',m.name)
+                                warning('Job unknown for',m.name,'- ask them to zone.')
                                 return 'unknown'
                             end()
                     }
@@ -43,7 +42,6 @@ function get_members()
 end
 
 windower.register_event('incoming chunk',function(id,data)
-
     if id ~= 0x0DD and id ~= 0x0DF then 
         return 
     end
@@ -75,30 +73,28 @@ windower.register_event('addon command',function(cmd)
 
     log('These People Showed:')
     for i,v in pairs(current_members) do
-        log(i, '->',v.job)
+        if v.job ~= 'unknown' then
+            log(i, '->',v.job)
+        end
     end
 
     local date = os.date('*t')
     local time = os.date('%H%M%S')
     
     local name = windower.ffxi.get_player().name
-    local filename = 'report_%.4u.%.2u.%.2u_%.2u.log':format(date.year, date.month, date.day,time)
+    local filename = 'report_%.4u.%.2u.%.2u_%.2u.log':format(date.year, date.month, date.day, time)
     local timestamp = '%.4u%.2u%.2u%.2u':format(date.year, date.month, date.day, time)
 
-    local report = T({ [timestamp] = current_members }):to_xml()
+    local report = T({ ['members'] = current_members }):to_xml()
     
     local file = files.new('/export/'..filename)
     if not file:exists() then
         file:create()
     end
+    
     file:append('<?xml version="1.1" ?>\n')
-    local confirm = file:append(report)
-   
-    if confirm and confirm.path and confirm.path:exists() then
-        log('File created:',confirm)
-    else
-        log('Something went wrong - could not create file.')
-    end
+    file:append('<timestamp>'.. timestamp ..'</timestamp>\n')
+    file:append(report)
 
     current_members = {}
 
