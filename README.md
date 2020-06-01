@@ -8,6 +8,7 @@ Complete addons:
 - Indi-Nope: removes graphical effect from Indi-Spells.
 - Witness Protection: assigns random persistent names to characters and linkshells that appear on screen (anonymize your screen)
 - Silt Tracker: track earnings of Silt and Beads in Escha/Reisenjima.  
+- TPSReport: exports an XML list of current alliance members.
 
 Utilities:
 - posfind: click to find your ingame coordinates (X,Y,Z)
