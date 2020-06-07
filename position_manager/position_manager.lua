@@ -68,12 +68,13 @@ function handle_commands(cmd,name,pos_x,pos_y)
                 if name:lower() == player_name:lower() then
                     move(settings)
                 end
-            end
+            elseif name ~= 'all' then
+                
         end
     elseif cmd == 'help' then
-        windower.add_to_chat(207,'plugin_manager: Usage: //pm set <Character|all> <x> <y> ')
+        windower.add_to_chat(207,'position_manager: Usage: //pm set <Character|all> <x> <y> ')
     else 
-        windower.add_to_chat(207,'plugin_manager: %s command not found.':format(cmd))
+        windower.add_to_chat(207,'position_manager: %s command not found.':format(cmd))
         windower.send_command('pm help')
     end    
 end
