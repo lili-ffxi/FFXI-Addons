@@ -7,7 +7,7 @@ Command: //pm set <Charactername|all> pos_x pos_y
 ### Examples:  
 `//pm set all 0 60`  
 Will set the default positioning for all characters to X: 0 and Y: 60 (the height of the Windows 10 taskbar with 150% UI scaling.)  
-Warning: the <all> name will delete every other character-specific settings that are already saved! It's best to use it only once after you install the addon, to set default position for non-specified characters.
+Warning: the `all` name will delete every other character-specific settings that are already saved! It's best to use it only once after you install the addon, to set default position for non-specified characters.
 
 `//pm set Yourname 1920 0`  
 Will set the default position for the character called "Yourname" to X: 1920 and Y: 0.  
