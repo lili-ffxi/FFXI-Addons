@@ -41,8 +41,17 @@ Settings are not yet saved. You can edit the preference table in the lua directl
 - 0.1.2 - Removed chatlog spam that occurred when all available rings were on recast, and other adjustments.  
 - 0.1.0 - Initial release.  
 
-### TO-DO ###
-- Check for point caps and potpourri buff, to not waste charges when capped.
+### Features
+- Does not use rings inside town. Can toggle with `//smeagol town` command.
+- Waits until you're not moving or casting a spell/using a JA/WS to use a ring.
+- Uses CP rings at level 99, and XP rings at level 98 or below.
+- Uses XP rings even at level 99 if one of the two overrides is set.
+- Detects when you are carrying capped JP or Merits, to not waste ring charges.  
+Merits are never considered capped if Emporox's Gift buff is active.
+
+### TO-DO
+- Nothing!? Suggestions welcome.
+Note: no, I won't make it automatically drop spent rings.
 
 Thanks to Kale for his gearswap suite, Smeagol started with code from that.  
-thanks to from20020516, the code that check for ring cooldown is from him.  
+Thanks to from20020516, the code that check for ring cooldown is from him.  
