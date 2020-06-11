@@ -28,7 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 _addon.name = 'Smeagol'
 _addon.author = 'Lili'
-_addon.version = '1.1.0'
+_addon.version = '1.1.2'
 _addon.commands = {'smeagol','sm'}
 
 require('logger')
@@ -39,6 +39,7 @@ extdata = require('extdata')
 res_slots = require('resources').slots
 res_zones = require('resources').zones
 --res_buffs = require('resources').buffs -- tentatively removed
+send_command = windower.send_command
 
 -- Adjust the rings you want to use here. Case sensitive.
 xp_rings = T{'Echad Ring','Caliber Ring','Emperor Band', 'Empress Band', 'Chariot Band', 'Resolution Ring', 'Allied Ring', 'Kupofried\'s Ring','Sprout Beret',}
@@ -144,6 +145,27 @@ local in_town = function()
     end
 end()
 
+local midaction = function()
+    local acting = false
+    local last_action = -1
+    local cooldown = false
+    
+    return function(param)
+        if param ~= nil then
+            acting = param and true
+            cooldown = type(param) == 'number' and param > 0 and param
+            last_action = os.clock()
+        end
+        if cooldown and os.clock() > (last_action + cooldown) then
+            cooldown = false
+            acting = false
+        end
+
+        return acting
+    end
+end()
+
+
 -- returns a string with human readable time.
 local time2human = function(seconds,period)
     local response = ''
@@ -177,11 +199,11 @@ function stop()
 end
 
 function gs_disable_slot(slot)
-    windower.send_command('gs disable '..res_slots[slot].en:gsub(' ','_'))
+    send_command('gs disable '..res_slots[slot].en:gsub(' ','_'))
 end
 
 function gs_enable_slot(slot)
-    windower.send_command('gs enable '..res_slots[slot].en:gsub(' ','_'))
+    send_command('gs enable '..res_slots[slot].en:gsub(' ','_'))
 end
 
 function my_preciouss() -- not very semantic but the ring will do that to you
@@ -189,10 +211,10 @@ function my_preciouss() -- not very semantic but the ring will do that to you
         return false
     end
 
-    if busy or moving then
+    if busy or moving or midaction() then 
         return false
     end
-
+    
     if in_town() and use_in_town == 'no' then
         return false
     end
@@ -246,7 +268,7 @@ function check_exp_buffs(option)
         if (player.main_job_level == 99 and override ~= 'xp') and not capped_jp then
             rings:extend(cp_rings_info)
         end
-        if (player.main_job_level < 99 or override == 'bo' or override == 'xp') and not capped_merits then
+        if player.main_job_level < 99 or ((override == 'bo' or override == 'xp') and not capped_merits) then
             rings:extend(xp_rings_info)
         end
         search_rings(rings)
@@ -318,20 +340,35 @@ function search_rings(item_info) -- thanks to from20020516, this code is from My
     end
 end
 
-windower.register_event('incoming chunk',function(id,data)
-    if id ~= 0x63 then
-        return
-    end
-
-    -- thanks Byrth, this is verbatim from Pointwatch.
-    if data:byte(5) == 5 then
-        local offset = windower.ffxi.get_player().main_job_id*6+13 -- So WAR (ID==1) starts at byte 19
-        local jp_held = data:unpack('H',offset+2)
-        capped_jp = jp_held == 500
-    elseif data:byte(5) == 2 then
-        local merits_held = data:byte(11)%128
-        local maximum_merits = data:byte(0x0D)%128    
-        capped_merits = merits_held == maximum_merits
+windower.register_event('incoming chunk', function(id,data,modified,is_injected,is_blocked)
+    if id == 0x028 then
+        p = windower.packets.parse_action(data)
+        if p.actor_id ~= windower.ffxi.get_player().id then
+            return
+        end
+        -- this could be much simpler but I like the categorizations
+        if p.category >= 2 and p.category <=5 then
+            midaction(2.5)
+        elseif p.category == 6 or p.category == 7 or p.category == 14 then -- JA, WS/TP moves, DNC moves
+            midaction(2.5)
+        elseif p.category == 8 or p.category == 9 or p.category == 12 or p.category == 15 then -- spells, items, ranged attacks, run JAs?
+            if p.param == 28787 then
+                midaction(2.5)
+            else
+                midaction(true)
+            end
+        end
+    elseif id == 0x63 then
+        -- thanks Byrth, this is verbatim from Pointwatch.
+        if data:byte(5) == 5 then
+            local offset = windower.ffxi.get_player().main_job_id*6+13 -- So WAR (ID==1) starts at byte 19
+            local jp_held = data:unpack('H',offset+2)
+            capped_jp = jp_held == 500
+        elseif data:byte(5) == 2 then
+            local merits_held = data:byte(11)%128
+            local maximum_merits = data:byte(0x0D)%128    
+            capped_merits = merits_held == maximum_merits
+        end
     end
 end)
 
@@ -356,16 +393,17 @@ windower.register_event('outgoing chunk',function(id,data,modified,is_injected,i
 			-- log(moving and 'moving' or 'stopped')
 		-- end
 
-		wasmoving = moving
+		-- wasmoving = moving
     end
 end)
+
 
 windower.register_event('addon command',function(cmd,opt)
     local cmd = cmd:lower()
     if cmd == 'reload' or cmd == 'r' then
-        windower.send_command('lua reload smeagol')
+        send_command('lua reload smeagol')
     elseif cmd == 'unload' or cmd == 'u' then
-        windower.send_command('lua unload smeagol')
+        send_command('lua unload smeagol')
     elseif cmd == 'on' or cmd == 'start' then
         log('Starting.')
         start()
@@ -385,13 +423,16 @@ windower.register_event('addon command',function(cmd,opt)
         stop()
         start()
         log('Checking for new available rings...')
-        log(capped_jp and 'JP are capped.' and '',capped_merits and 'Merits are capped' or '')
+        log(capped_jp and 'JP are capped.' or '',capped_merits and 'Merits are capped' or '')
     elseif cmd == 'reset' then
         stop()
         init()
         log('Override disabled and delay between checks reset to %s seconds. Restarting.':format(cycle_time))
     elseif cmd == 'help' then
         log('Go to ffxiah.com and search for \'smeagol\' to get help.')
+    else
+        log('Command not valid.')
+        send_command('smeagol help')
     end
 end)
 
