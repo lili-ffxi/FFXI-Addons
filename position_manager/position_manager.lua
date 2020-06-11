@@ -26,7 +26,7 @@
 
 _addon.name = 'position_manager'
 _addon.author = 'Lili'
-_addon.version = '0.0.1'
+_addon.version = '0.0.2'
 _addon.command = 'pm'
 
 if not windower.file_exists(windower.windower_path .. '\\plugins\\WinControl.dll') then
@@ -68,8 +68,8 @@ function handle_commands(cmd,name,pos_x,pos_y)
                 if name:lower() == player_name:lower() then
                     move(settings)
                 end
-            elseif name ~= 'all' then
-                
+            -- elseif name ~= 'all' then
+            end
         end
     elseif cmd == 'help' then
         windower.add_to_chat(207,'position_manager: Usage: //pm set <Character|all> <x> <y> ')
