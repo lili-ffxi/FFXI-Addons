@@ -24,6 +24,7 @@ Rings need to be in Inventory, or Wardrobe 1-4. If you want to keep a ring from 
 Settings are not yet saved. You can edit the preference table in the lua directly.
 
 ### Changelog:
+- 1.2.2 - Improved midaction logic.
 - 1.2.1 - Fixed bug in the capped merit detection.
 - 1.2.0 - Added midaction check.
 - 1.1.0 - Human readable times, added detection for capped JP/Merits, added movement check.
