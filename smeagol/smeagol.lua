@@ -28,7 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 _addon.name = 'Smeagol'
 _addon.author = 'Lili'
-_addon.version = '1.2.1'
+_addon.version = '1.2.2'
 _addon.commands = {'smeagol','sm'}
 
 require('logger')
@@ -253,11 +253,12 @@ function check_exp_buffs(option)
     end
 
     -- account for Kupofried trust
+    -- can fail in the time between summoning Kupofried and the aura becoming active on the player.
     if xp_buff > 0 then
         local party = windower.ffxi.get_party()
         for i = 1,5 do
             local member = party['p' .. i]
-            if member and member.name == 'Kupofried' then
+            if member and member.name == 'Kupofried' and sqrt(member.distance) < 6 then -- possibly make sure we're in range of the aura
                 xp_buff = xp_buff -1
             end
         end
@@ -316,7 +317,10 @@ function search_rings(item_info) -- thanks to from20020516, this code is from My
                         local ext = extdata.decode(get_items(item.bag,item.slot))
                         local delay = ext.activation_time+18000-os.time()
                         timeout = timeout +1
-                        if delay > 0 then
+                        if midaction() then
+                            log(stats[lang],math.max(delay,0),'busy')
+                            ext.usable = false
+                        elseif delay > 0 then
                             log(stats[lang],delay)
                         elseif log_flag then
                             log_flag = false
@@ -347,7 +351,7 @@ windower.register_event('incoming chunk', function(id,data,modified,is_injected,
             return
         end
         -- this could be much simpler but I like the categorizations
-        if p.category >= 2 and p.category <=5 then
+        if p.category >= 2 and p.category <= 8 then -- finish: ranged atk, WS, spells, items; begin: JAs, WSs,
             midaction(2.5)
         elseif p.category == 6 or p.category == 7 or p.category == 14 then -- JA, WS/TP moves, DNC moves
             midaction(2.5)
@@ -392,7 +396,6 @@ windower.register_event('outgoing chunk',function(id,data,modified,is_injected,i
 		-- if wasmoving ~= moving then
 			-- log(moving and 'moving' or 'stopped')
 		-- end
-
 		-- wasmoving = moving
     end
 end)
