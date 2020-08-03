@@ -28,7 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 _addon.name = 'Smeagol'
 _addon.author = 'Lili'
-_addon.version = '1.2.2'
+_addon.version = '1.2.3'
 _addon.commands = {'smeagol','sm'}
 
 require('logger')
@@ -44,6 +44,10 @@ send_command = windower.send_command
 -- Adjust the rings you want to use here. Case sensitive.
 xp_rings = T{'Echad Ring','Caliber Ring','Emperor Band', 'Empress Band', 'Chariot Band', 'Resolution Ring', 'Allied Ring', 'Kupofried\'s Ring','Sprout Beret',}
 cp_rings = T{'Trizek Ring','Endorsement Ring','Facility Ring','Capacity Ring','Vocation Ring','Guide Beret',}
+
+-- smeagol will swap to this ring after using the appropriate xp/cp ring. Set to false to disable.
+-- currently only works with rings and not with berets
+idle_ring = false 
 
 -- set your preferences here
 function init()
@@ -332,6 +336,10 @@ function search_rings(item_info) -- thanks to from20020516, this code is from My
             coroutine.sleep(2)
             busy = false
             gs_enable_slot(stats.slot)
+            if idle_ring then
+                coroutine.sleep(5)
+                windower.chat.input('/equip %s %s':format(stats.slot,idle_ring))
+            end
             min_recast = false
             break
             end
