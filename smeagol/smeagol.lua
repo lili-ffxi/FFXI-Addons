@@ -28,7 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 _addon.name = 'Smeagol'
 _addon.author = 'Lili'
-_addon.version = '1.2.3'
+_addon.version = '1.2.4'
 _addon.commands = {'smeagol','sm'}
 
 require('logger')
@@ -262,7 +262,7 @@ function check_exp_buffs(option)
         local party = windower.ffxi.get_party()
         for i = 1,5 do
             local member = party['p' .. i]
-            if member and member.name == 'Kupofried' and sqrt(member.distance) < 6 then -- possibly make sure we're in range of the aura
+            if member and member.name == 'Kupofried' and math.sqrt(member.mob.distance) < 6 then -- possibly make sure we're in range of the aura
                 xp_buff = xp_buff -1
             end
         end
