@@ -3,8 +3,8 @@
 Set per-character screen position.  
 
 Commands:  
-  //pm set <pos_x> <pos_y> \[Charactername|:all\]
-  //pm set delay <seconds> \[Charactername|:all\]
+  //pm set <pos_x> <pos_y> \[Charactername|:all\]  
+  //pm set delay <seconds> \[Charactername|:all\]  
 
 The delay value is 0 by default. On some systems with very fast or very slow storage, you might need to increase it a bit to make sure that the `wincontrol` plugin gets loaded before position_manager.
 
