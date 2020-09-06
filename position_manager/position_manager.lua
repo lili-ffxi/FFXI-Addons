@@ -26,7 +26,7 @@
 
 _addon.name = 'position_manager'
 _addon.author = 'Lili'
-_addon.version = '1.1.1'
+_addon.version = '1.1.2'
 _addon.command = 'pm'
 
 if not windower.file_exists(windower.windower_path .. '\\plugins\\WinControl.dll') then
@@ -71,10 +71,10 @@ function handle_commands(cmd, ...)
     elseif cmd == 'set' then
         local arg = {...}
         local name = arg[3]
-        if name ~= nil and type(name) ~= 'string' then
-            windower.add_to_chat(207, 'position_manager: ERROR - invalid name provided.')
-            show_help()
-            return
+        local err = false
+        
+        if name ~= nil and name:find('[%A]') then
+            err = 'invalid name provided'
         elseif not name then
             name = windower.ffxi.get_player().name
         elseif name == ':all' then
@@ -83,13 +83,13 @@ function handle_commands(cmd, ...)
 
         if arg[1] == 'delay' then
             settings.delay = tonumber(arg[2])
+            
             if settings.delay > 0 then
                 config.save(settings, name)
                 windower.add_to_chat(207, 'position_manager: Delay set to %s for %s.':format(settings.delay, name))
+                return -- don't move window if we just set delay.
             else
-                windower.add_to_chat(207, 'position_manager: ERROR - invalid delay provided.')
-                show_help()
-                return
+                err = 'invalid delay provided'
             end
         elseif arg[1] and arg[2] then
             settings.x = tonumber(arg[1])
@@ -97,24 +97,26 @@ function handle_commands(cmd, ...)
 
             if settings.x and settings.y then
                 config.save(settings, name)
-
-                if windower.ffxi.get_info().logged_in then
-                    player_name = windower.ffxi.get_player().name
-                    if name:lower() == player_name:lower() then
-                        move(settings)
-                    end
-                end
                 windower.add_to_chat(207, 'position_manager: Position set to %s, %s for %s.':format(settings.x, settings.y, name))
             else
-                windower.add_to_chat(207, 'position_manager: ERROR - invalid position provided.')
-                show_help()
-                return
+                err = 'invalid position provided.'
             end
         else
-            windower.add_to_chat(207, 'position_manager: ERROR - invalid arguments provided.')
-            show_help()
-            return
+            err = 'invalid arguments provided.'
         end
+
+        if err then
+            windower.add_to_chat(207, 'position_manager: ERROR - %s.':format(err))
+            show_help()
+        else
+            if windower.ffxi.get_info().logged_in then
+                player_name = windower.ffxi.get_player().name
+                if name:lower() == player_name:lower() then
+                    move(settings)
+                end
+            end
+        end
+
         -- TODO: possibly add IPC
         return
     elseif cmd ~= 'help' then
