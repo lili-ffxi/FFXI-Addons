@@ -83,7 +83,7 @@ lang = windower.ffxi.get_info().language:lower()
 
 function preferences()
 	ignore_items = S{ 'linkshell', 'linkpearl' }
-	ignore_players = S{ 'Freonski','Cromechu','Ariasan','Muljn','Mulka','Miavi','Tuavi' }
+	ignore_players = S{ 'Character','Mulename', }
 
 	ignore_rare = true
 	ignore_ex = true
