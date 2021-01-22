@@ -17,5 +17,5 @@ windower.register_event('load','login',function()
     
     windower.add_to_chat(207,'tellfix: TellFix is ENABLED.')
     windower.add_to_chat(207,'tellfix: This is a temporary solution until your private server updated the tell packet.')
-    windower.add_to_chat(207,'tellfix: If you\'re receiving empty or garbage tell lines, try unloading this addon with //lua unload chatfix.')    
+    windower.add_to_chat(207,'tellfix: If you\'re receiving empty or garbage tell lines, try unloading this addon with //lua unload tellfix.')    
 end)
