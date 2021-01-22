@@ -3,7 +3,7 @@
 **For private servers only.**
 
 Fixes being unable to send tells on private servers after the 10 Sept 2020 update to the retail client.  
-That update moved the Sender Name field of chat packets from the 5th byte to the 6th.
+That update moved the Sender Name field of chat packets from the 5th byte to the 6th, and added one extra byte in the header.
 Most private servers have not updated, and are still expecting the old tell packets, which make the tell fail to send.
 
 **NOTE:** this is a band-aid solution. Please let your server admin know that the correct solution is for them to upgrade their server to accept the new packet format.
