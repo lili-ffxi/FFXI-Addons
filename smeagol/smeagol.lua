@@ -28,7 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 _addon.name = 'Smeagol'
 _addon.author = 'Lili'
-_addon.version = '1.2.4'
+_addon.version = '1.2.5'
 _addon.commands = {'smeagol','sm'}
 
 require('logger')
@@ -47,7 +47,7 @@ cp_rings = T{'Trizek Ring','Endorsement Ring','Facility Ring','Capacity Ring','V
 
 -- smeagol will swap to this ring after using the appropriate xp/cp ring. Set to false to disable.
 -- currently only works with rings and not with berets
-idle_ring = false 
+idle_ring = false
 
 -- set your preferences here
 function init()
@@ -183,7 +183,7 @@ local time2human = function(seconds,period)
         if h > 0 then response = '%s hour%s':format(h,h > 1 and 's' or '') end
         if h > 0 and m > 0 then response = response .. ' and ' end
         if m > 0 then response = response .. '%s minute%s':format(m,m > 1 and 's' or '') end
-        if h+m < 1 then response = '%s seconds':format(s) end
+        if (h*10 + m) < 2 then response = '%s seconds':format(s) end
     end
     
     return response .. (period and '.' or '')
@@ -338,7 +338,7 @@ function search_rings(item_info) -- thanks to from20020516, this code is from My
             gs_enable_slot(stats.slot)
             if idle_ring then
                 coroutine.sleep(5)
-                windower.chat.input('/equip %s %s':format(stats.slot,idle_ring))
+                windower.chat.input('/equip "%s" %s':format(res_slots[stats.slot].name,idle_ring))
             end
             min_recast = false
             break
@@ -395,6 +395,8 @@ windower.register_event('load', function()
     local packet = packets.new('outgoing', 0x061, {}) 
     packets.inject(packet)
 end)
+
+windower.register_event('unload',stop)
 
 windower.register_event('outgoing chunk',function(id,data,modified,is_injected,is_blocked)
     if id == 0x015 then
