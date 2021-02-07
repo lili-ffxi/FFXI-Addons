@@ -12,7 +12,7 @@ local say = windower.chat.input
 
 local drama = {}
 
-local statues = T{'Corporal Tombstone','Lithicthrower Image', 'Incarnation Icon', 'Impish Statue'}
+local statues = T{'Corporal Tombstone','Lithicthrower Image', 'Incarnation Icon', 'Impish Statue','Overseer\'s Tombstone','Mu\'Sha Effigy','Envincing Idol','Impish Golem'}
 local ordinal = {'>>> First','Second','Third',}
 
 function log(...) windower.add_to_chat(207,...) end
