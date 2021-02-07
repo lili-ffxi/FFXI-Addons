@@ -1,7 +1,7 @@
 _addon.name = 'Dramagen'
 _addon.author = 'Evil Lili'
 _addon.version = '6.6.6'
-_addon.subversion = '2'
+_addon.subversion = '3'
 _addon.command = 'drama'
 
 local packets = require('packets')
@@ -12,7 +12,7 @@ local say = windower.chat.input
 
 local drama = {}
 
-local statues = {'Corporal Tombstone','Lithicthrower Image', 'Incarnation Icon', 'Impish Statue'}
+local statues = T{'Corporal Tombstone','Lithicthrower Image', 'Incarnation Icon', 'Impish Statue'}
 local ordinal = {'>>> First','Second','Third',}
 
 function log(...) windower.add_to_chat(207,...) end
