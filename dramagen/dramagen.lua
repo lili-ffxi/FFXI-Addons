@@ -1,7 +1,7 @@
 _addon.name = 'Dramagen'
 _addon.author = 'Evil Lili'
 _addon.version = '6.6.6'
-_addon.subversion = '1'
+_addon.subversion = '2'
 _addon.command = 'drama'
 
 local packets = require('packets')
@@ -12,7 +12,10 @@ local say = windower.chat.input
 
 local drama = {}
 
+local statues = {'Corporal Tombstone','Lithicthrower Image', 'Incarnation Icon', 'Impish Statue'}
 local ordinal = {'>>> First','Second','Third',}
+
+function log(...) windower.add_to_chat(207,...) end
 
 windower.register_event('load','login',function(name)
     local name = name or windower.ffxi.get_player().name
@@ -23,7 +26,7 @@ windower.register_event('load','login',function(name)
    
     log('dramagen: Drama Generator 6.6.6.' .. _addon.subversion)
     log('dramagen: Use at your own risk.')
-    log('dramagen: //drama')
+    log('dramagen: command: //drama')
 end)
 
 windower.register_event('action',function(act)
@@ -32,7 +35,7 @@ windower.register_event('action',function(act)
     end
     
     local actor = windower.ffxi.get_mob_by_id(act.actor_id)
-    if not actor or not actor.in_party or not actor.in_alliance then
+    if not actor.in_alliance and not actor.in_party then
         return
     end
 
@@ -43,6 +46,11 @@ windower.register_event('action',function(act)
     data.target_name = windower.ffxi.get_mob_by_id(data.target).name or 'Unknown'
     data.damage = act.targets[1].actions[1].param
     data.ws = weaponskills[act.param].english
+    
+    if data.ws == 'Leaden Salute' and statues:contains(data.target_name) then
+        log('Leaden Salute on Divergence Statues do not count.')
+        return
+    end
     
     for i=1,math.max(#drama,3) do
         local t = drama[i]
@@ -65,12 +73,6 @@ windower.register_event('addon command',function(arg)
         cmd('lua r dramagen')
         return
     end
-    
-    if #drama < 1 then
-      say('/e No drama yet! Perform some weapon skills please.')
-      return
-    end
-    
     for i=#drama,1,-1 do
         local t = drama[i]
         if t.damage > 0 then
