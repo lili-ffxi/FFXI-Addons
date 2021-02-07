@@ -56,7 +56,7 @@ windower.register_event('action',function(act)
         local t = drama[i]
         if not t or data.damage > t.damage then
             if tonumber(i) == 1 then
-                say('/p New best! %s takes the lead with %s damage on %s!':format(data.actor_name,data.damage,data.target_name))            
+                say('/p New best! %s takes the lead with %s damage on %s!':format(data.actor_name,data.damage,data.target_name)):schedule(math.random(2,5)            
             end
             table.insert(drama, i, data)
             break
