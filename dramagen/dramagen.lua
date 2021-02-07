@@ -18,7 +18,8 @@ local ordinal = {'>>> First','Second','Third',}
 function log(...) windower.add_to_chat(207,...) end
 
 windower.register_event('load','login',function(name)
-    local name = name or windower.ffxi.get_player().name
+    local player = windower.ffxi.get_player()
+    local name = name or player.name
     
     if not name then
         return
