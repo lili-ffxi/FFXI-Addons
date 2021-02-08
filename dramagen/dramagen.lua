@@ -20,6 +20,15 @@ local ordinal = {'>>> First','Second','Third',}
 
 function log(...) windower.add_to_chat(207,...) end
 
+function get_actor(id)
+    local actor = windower.ffxi.get_mob_by_id(id)
+    if not actor.in_alliance and not actor.in_party then
+        return false
+    else
+        return actor
+    end
+end
+
 windower.register_event('load','login',function(name)
     local player = windower.ffxi.get_player()
     local name = name or player.name
@@ -36,19 +45,17 @@ end)
 windower.register_event('action',function(act)
     
     if act.category == 4 and act.targets[1].actions[1].message == 252 then
-        local actor = windower.ffxi.get_mob_by_id(act.actor_id)
-        if not actor.in_alliance and not actor.in_party then
-            return
+        local actor = get_actor(act.actor_id)
+        if actor then 
+            bursts[actor.name] = (bursts[actor.name] or 0) +1
         end
-        
-        bursts[actor.name] = (bursts[actor.name] or 0) +1
         return
     elseif act.category ~= 3 then
         return
     end
     
-    local actor = windower.ffxi.get_mob_by_id(act.actor_id)
-    if not actor.in_alliance and not actor.in_party then
+    local actor = get_actor(act.actor_id)
+    if not actor then
         return
     end
 
