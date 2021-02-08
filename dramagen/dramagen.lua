@@ -1,7 +1,7 @@
 _addon.name = 'Dramagen'
 _addon.author = 'Evil Lili'
 _addon.version = '6.6.6'
-_addon.subversion = '3'
+_addon.subversion = '4'
 _addon.command = 'drama'
 
 local packets = require('packets')
@@ -11,6 +11,7 @@ local cmd = windower.send_command
 local say = windower.chat.input
 
 local drama = {}
+local fudo = {}
 
 local statues = T{'Corporal Tombstone','Lithicthrower Image', 'Incarnation Icon', 'Impish Statue','Overseer\'s Tombstone','Mu\'Sha Effigy','Envincing Idol','Impish Golem'}
 local ordinal = {'>>> First','Second','Third',}
@@ -53,6 +54,13 @@ windower.register_event('action',function(act)
         return
     end
     
+    if data.ws == 'Tachi: Fudo' and act.targets[1].actions.message == 188 then
+        say:schedule(math.random(1,3),'%s whiffs Fudo... again...':format(data.actor))
+        local misses = fudo[data.actor] or 0
+        fudo[data.actor] = misses+1
+        return
+    end
+    
     for i=1,math.max(#drama,3) do
         local t = drama[i]
         if not t or data.damage > t.damage then
@@ -81,4 +89,18 @@ windower.register_event('addon command',function(arg)
             coroutine.sleep(2+math.random(0.5,2))
         end
     end   
+    
+    local whiffs = 0
+    local player = ''
+    for i,v in pairs(fudo) do
+        if v > whiffs then
+            whiffs = v
+            player = i
+        end
+    end
+    if whiffs > 0 then
+        say('/p Oh, and %s missed his Fudos %s times in total.':format(player,whiffs))
+        coroutine.sleep(2+math.random(0.5,2))
+    end
+        
 end)
