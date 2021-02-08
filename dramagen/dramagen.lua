@@ -1,7 +1,7 @@
 _addon.name = 'Dramagen'
 _addon.author = 'Evil Lili'
 _addon.version = '6.6.6'
-_addon.subversion = '4'
+_addon.subversion = '5'
 _addon.command = 'drama'
 
 require('logger')
