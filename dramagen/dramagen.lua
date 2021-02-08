@@ -13,6 +13,7 @@ local say = windower.chat.input
 
 local drama = {}
 local fudo = {}
+local bursts = {}
 
 local statues = T{'Corporal Tombstone','Lithicthrower Image', 'Incarnation Icon', 'Impish Statue','Overseer\'s Tombstone','Mu\'Sha Effigy','Envincing Idol','Impish Golem'}
 local ordinal = {'>>> First','Second','Third',}
@@ -33,7 +34,16 @@ windower.register_event('load','login',function(name)
 end)
 
 windower.register_event('action',function(act)
-    if act.category ~= 3 then
+    
+    if act.category == 4 and act.targets[1].actions[1].message == 252 then
+        local actor = windower.ffxi.get_mob_by_id(act.actor_id)
+        if not actor.in_alliance and not actor.in_party then
+            return
+        end
+        
+        bursts[actor.name] = (bursts[actor.name] or 0) +1
+        return
+    elseif act.category ~= 3 then
         return
     end
     
@@ -103,5 +113,18 @@ windower.register_event('addon command',function(arg)
         say('/p Oh, and %s missed his Fudos %s times in total.':format(player,whiffs))
         coroutine.sleep(2+math.random(0.5,2))
     end
-        
+    
+    local boom = 0
+    local player = ''
+    for i,v in pairs(bursts) do
+        if v > boom then
+            boom = v
+            player = i
+        end
+    end
+    if boom == 1 then
+        say('/p Honorable mention for %s and his single magic burst. There was an attempt.':format(player,boom))
+    elseif boom > 1 then
+        say('/p Honorable mention for %s and his %s magic bursts - not that anybody cares.':format(player,boom))
+    end
 end)
