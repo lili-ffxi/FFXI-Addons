@@ -56,8 +56,8 @@ windower.register_event('action',function(act)
     
     if data.ws == 'Tachi: Fudo' and act.targets[1].actions.message == 188 then
         say:schedule(math.random(1,3),'%s whiffs Fudo... again...':format(data.actor))
-        local misses = fudo[data.actor] or 0
-        fudo[data.actor] = misses+1
+        local misses = fudo[data.actor_name] or 0
+        fudo[data.actor_name] = misses+1
         return
     end
     
