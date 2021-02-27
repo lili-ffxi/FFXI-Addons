@@ -1,7 +1,7 @@
 _addon.name = 'Dramagen'
 _addon.author = 'Evil Lili'
 _addon.version = '6.6.6'
-_addon.subversion = '5'
+_addon.subversion = '6'
 _addon.command = 'drama'
 
 require('logger')
@@ -65,7 +65,7 @@ windower.register_event('action',function(act)
     data.target = act.targets[1].id
     data.target_name = windower.ffxi.get_mob_by_id(data.target).name or 'Unknown'
     data.damage = act.targets[1].actions[1].param
-    data.ws = weaponskills[act.param].english
+    data.ws = weaponskills[act.param] and weaponskills[act.param].english or 'Not Sure What Move It Was'
     
     if data.ws == 'Leaden Salute' and statues:contains(data.target_name) then
         log('Leaden Salute on Divergence Statues do not count.')
