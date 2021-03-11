@@ -8,12 +8,13 @@ local extdata = require('extdata')
 local res = require('resources')
 
 local lang
+local jobs
 
-local work = function(str)
+local work = function(str, job)
     log('Searching gear with:',str)
     local results = {}
     
-    local job = windower.ffxi.get_player().main_job_id
+    job = job or windower.ffxi.get_player().main_job_id
     
     for i,bag in pairs(res.bags) do
 
@@ -55,17 +56,30 @@ end
 
 windower.register_event('load',function()
     lang = windower.ffxi.get_info().language:lower()
+    jobs = {}
+    for i,v in pairs(res.jobs) do
+        if i ~= 23 then --monipulator
+            local short = v[lang.."_short"]:lower()
+            local long = v[lang]:lower()
+            local id = v.id
+            jobs[short] = id
+            jobs[long] = id
+        end
+    end
 end)
 
 windower.register_event('addon command', function(...)
     local args = T{...}
     
     if not args[1] or args[1] == 'help' then
-        log('//statsearch <string>')
-        log('Finds all items equippable by your current job that have <string> in their description or augments.')
+        log('//statsearch [job] <string>')
+        log('Finds all items equippable by your current job (or job provided in command) that have <string> in their description or augments.')
         return
     elseif args[1] == 'r' then
         windower.send_command('lua r statsearch')
+        return
+    elseif args[1] and jobs[args[1]:lower()] then
+        work(args:slice(2):concat(' '):lower(), jobs[args[1]:lower()])
         return
     end
     
