@@ -1,6 +1,6 @@
 _addon.name = 'special'
 _addon.author = 'Eliidyr, Lili'
-_addon.version = '0.0.1'
+_addon.version = '0.0.2'
 
 math.randomseed(os.clock()); math.random(); math.random(); math.random()
 
