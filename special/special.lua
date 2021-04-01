@@ -12,6 +12,7 @@ local msg = {"You're that \"Nothing\" when people ask me what I'm thinking about
 "I like your style.",
 "You have the best laugh.",
 "I appreciate you.",
+"I believe in you!",
 "You are the most perfect you there is.",
 "Our system of inside jokes is so advanced that only you and I get it. And I like that.",
 "You're strong.",
