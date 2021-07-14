@@ -1,5 +1,5 @@
 _addon.name = 'Witness Protection'
-_addon.version = '0.1.0'
+_addon.version = '0.1.1'
 _addon.author = 'Lili'
 _addon.command = 'wit'
 
@@ -19,7 +19,7 @@ local filtered_packets = {
     [0x009] = {['name_field'] = 'Name',             ['id_field'] = false,           }, -- Check notifications and a lots other things.
     [0x027] = {['name_field'] = 'Player Name',      ['id_field'] = 'Player',        },
     [0x017] = {['name_field'] = 'Sender Name',      ['id_field'] = false,           },    
-    [0x070] = {['name_field'] = 'Player Name'       ['id_field'] = false,           }, -- Synthesis, untested    
+    [0x070] = {['name_field'] = 'Player Name',      ['id_field'] = false,           }, -- Synthesis, untested    
     [0x078] = {['name_field'] = 'Proposer Name',    ['id_field'] = 'Proposer ID',   },
     [0x079] = {['name_field'] = 'Proposer Name',    ['id_field'] = false,           },
     [0x0B6] = {['name_field'] = 'Target Name',      ['id_field'] = false,           },    
