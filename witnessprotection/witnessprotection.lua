@@ -4,7 +4,9 @@ _addon.author = 'Lili'
 _addon.command = 'wit'
 
 require('logger')
-packets = require('packets')
+require('strings')
+local extdata = require('extdata')
+local packets = require('packets')
 
 packets.raw_fields.incoming[0x009] = L{
     {ctype='data[17]',              label='_dummy1'},                                   -- 70
@@ -32,6 +34,18 @@ local filtered_packets = {
     [0x108] = {['name_field'] = 'Name',             ['id_field'] = 'ID',            },
     [0x109] = {['name_field'] = 'Buyer Name',       ['id_field'] = 'Buyer ID',      },
     [0x10A] = {['name_field'] = 'Buyer Name',       ['id_field'] = false,           },    
+}
+
+local ls_enc = {
+    charset = T('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ':split()):update({
+        [0] = '`',
+        [60] = 0:char(),
+        [63] = 0:char(),
+    }),
+    bits = 6,
+    terminator = function(str)
+        return (#str % 4 == 2 and 60 or 63):binary()
+    end
 }
 
 local name_cache = { -- Can put in here any default renaming you want
@@ -139,7 +153,6 @@ function ls_colors(r, g, b) -- this is also ugly but I'm sleepy
     return m(linkshell_cache[color][1]), m(linkshell_cache[color][2]), m(linkshell_cache[color][3])
 end
 
-
 windower.register_event('incoming chunk',function(id, original, modified, injected, blocked)
     if filtered_packets[id] then
         local updated = false
@@ -203,8 +216,22 @@ windower.register_event('incoming chunk',function(id, original, modified, inject
         end
         return(packets.build(p))
     end
-end)
 
+    if id == 0x020 then
+        p = packets.parse('incoming', original)
+        if p.Item >= 513 and p.Item <= 528 then -- linkshell/pearlsack/linkpearl
+            p.extdata = p.ExtData
+            p.id = p.Item
+            local data = extdata.decode(p)
+            if data.status_id ~= 0 then
+                local name = ls_names(data.name)
+                local encoded_name = name:encode(ls_enc)
+                p.ExtData = string.sub(p.extdata, 0,9)..encoded_name
+                return packets.build(p)
+            end
+        end
+    end
+end)
 windower.register_event('outgoing chunk',function(id, original, modified, injected, blocked)
     if id == 0x0B6 then
         p = packets.parse('outgoing',original)
