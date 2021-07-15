@@ -26,11 +26,11 @@ Also due to the name cache, it is possible to assign permanent renames to anybod
 All the code in this has been written by me, but the original idea belong to *towbes* from the Ashita discord, who is writing the exact same thing for Ashita.
 
 **Known issues:**  
-- LS names can be garbage, this is due to a quirk of Windower which will be fixed soon. If it happens to you, just wait for the next Windower update.
 - Synthesis messages are untested so use at your own risk.
 
 **To-do:**  
-- maybe randomize character race and/or face  
+- randomize character race and/or face  
+- maybe make everybody a mithra (except tarus, they will be galkas)
 - not sure what else.  
 
 Please test it (at your own risk!) and report any suggestion/bugs/improvements. Thanks, and enjoy!
