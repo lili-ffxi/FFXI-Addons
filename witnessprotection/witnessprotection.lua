@@ -1,5 +1,5 @@
 _addon.name = 'Witness Protection'
-_addon.version = '0.1.1'
+_addon.version = '0.2.0'
 _addon.author = 'Lili'
 _addon.command = 'wit'
 
