@@ -5,6 +5,7 @@ _addon.command = 'wit'
 
 require('logger')
 require('strings')
+require('pack')
 local extdata = require('extdata')
 local packets = require('packets')
 
@@ -216,7 +217,8 @@ windower.register_event('incoming chunk',function(id, original, modified, inject
         end
         return(packets.build(p))
     end
-
+    
+    -- inventory update
     if id == 0x020 then
         p = packets.parse('incoming', original)
         if p.Item >= 513 and p.Item <= 528 then -- linkshell/pearlsack/linkpearl
@@ -226,10 +228,12 @@ windower.register_event('incoming chunk',function(id, original, modified, inject
             if data.status_id ~= 0 then
                 local name = ls_names(data.name)
                 local encoded_name = name:encode(ls_enc)
-                p.ExtData = string.sub(p.extdata, 0,9)..encoded_name
+                local r, g, b = ls_colors(data.r/17, data.g/17, data.b/17)
+                p.ExtData = p.extdata:sub(0,6)..'b4b4b4b4':pack(r, g, b, p.extdata:unpack('b8', 8, 4))..p.extdata:sub(9,9)..encoded_name
                 return packets.build(p)
             end
         end
+        return
     end
 end)
 windower.register_event('outgoing chunk',function(id, original, modified, injected, blocked)
