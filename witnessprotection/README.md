@@ -5,6 +5,7 @@ This addon takes care of renaming all the characters you encounter to random nam
 Potentially useful for, well, streamers or videomakers that want to mantain partial anonymity on the internet. Probably useful for other things but I'll leave that up to you to find. It was also quite fun to write.
 
 **Changelog:**
+-  0.2.0 - Added anonymization for linkshell items in inventory and for the outgoing LS message display (Rubenator)
 -  0.1.0 - Added persistent random names and colors for Linkshells, improved caching of names, revamped code significantly.  
 - 0.0.11 - testing ls colors  
 - 0.0.10 - added incoming /check notifications and improved generation of names  
