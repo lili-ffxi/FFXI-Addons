@@ -30,3 +30,4 @@ Incomplete addons:
 - Friendzone: automatically calls trusts over and over. A bit bugged but workable.
 - SafeOboro: makes everybody around Oboro in Port Jeuno disappear, so that you don't have any risk whatsoever of trading to scammers. Might make the zone laggy.
 - JobInit: like init.txt, but specific per character per job.
+- kaomoji: minimal kaomoji support for ffxi (behaves like /shrug /tableflip and /unflip do on discord)
