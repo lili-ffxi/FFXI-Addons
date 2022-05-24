@@ -28,7 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 _addon.name = 'Smeagol'
 _addon.author = 'Lili'
-_addon.version = '1.2.5'
+_addon.version = '1.2.6'
 _addon.commands = {'smeagol','sm'}
 
 require('logger')
@@ -282,7 +282,7 @@ end
 
 function search_rings(item_info) -- thanks to from20020516, this code is from MyHome addon with some modifications.
     local item_array = {}
-    local bags = {0,8,10,11,12} --inventory,wardrobe1-4
+    local bags = {0,8,10,11,12,13,14,15,16} --inventory,wardrobe1-8
     local get_items = windower.ffxi.get_items
     for i=1,#bags do
         for _,item in ipairs(get_items(bags[i])) do
