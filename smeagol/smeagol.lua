@@ -28,7 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 _addon.name = 'Smeagol'
 _addon.author = 'Lili'
-_addon.version = '1.2.6'
+_addon.version = '1.3.0'
 _addon.commands = {'smeagol','sm'}
 
 require('logger')
