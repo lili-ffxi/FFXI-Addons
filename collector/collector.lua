@@ -1,6 +1,6 @@
 _addon.name = 'Collector'
 _addon.author = 'Lili'
-_addon.version = '0.1.0'
+_addon.version = '0.1.1'
 _addon.commands = {'memnon','collection','col'}
 
 require('chat')
@@ -9,6 +9,7 @@ require('tables')
 
 local slips = require('slips')
 local res_items = require('resources').items
+local key_items = require('resources').key_items
 
 local collections = require('collections') 
 
@@ -20,11 +21,27 @@ sorted_bags = L{'safe', 'safe2', 'storage', 'locker',
                 'wardrobe5', 'wardrobe6', 'wardrobe7','wardrobe8', 
                 'slip 01', 'slip 02', 'slip 03', 'slip 04', 'slip 05', 'slip 06', 'slip 07', 'slip 08', 'slip 09', 'slip 10', 
                 'slip 11', 'slip 12', 'slip 13', 'slip 14', 'slip 15', 'slip 16', 'slip 17', 'slip 18', 'slip 19', 'slip 20', 
-                'slip 21', 'slip 22', 'slip 23', 'slip 24', 'slip 25', 'slip 26', 'slip 27', 'slip 28', }
+                'slip 21', 'slip 22', 'slip 23', 'slip 24', 'slip 25', 'slip 26', 'slip 27', 'slip 28', 
+                'key items', }
 
 function add_result(result,bag,count)
     local count = count > 1 and ' ('..count..')' or ''
     return (bag == 'missing' and result:color(259) or result:color(258)) .. count
+end
+
+function curate_collection(collection, name, results, bag, count)
+    local count = count or 1
+    if collection:contains(name) then
+        if not results[bag] then
+            results[bag] = L{}
+        end
+        results[bag]:append(add_result(name,bag,count))
+        local m = results.missing:find(name)
+        if m then
+            results.missing:remove(m)
+        end
+        results.owned:append(name)
+    end
 end
 
 function curate(set)
@@ -42,17 +59,7 @@ function curate(set)
 			data = inventory[bag][i]
 			if data.id ~= 0 then
                 local name = res_items[data.id].name
-                if collection:contains(name) then
-                    if not results[bag] then
-                        results[bag] = L{}
-                    end
-                    results[bag]:append(add_result(name,bag,data.count))
-                    local m = results.missing:find(name)
-                    if m then
-                        results.missing:remove(m)
-                    end
-                    results.owned:append(name)
-                end
+                curate_collection(collection, name, results, bag, data.count)
 			end
         end
     end
@@ -62,18 +69,14 @@ function curate(set)
         local slip_name = 'slip '..tostring(slips.get_slip_number_by_id(slip_id)):lpad('0', 2)
         for _, id in ipairs(slip_storages[slip_id]) do
             local name = res_items[id].name
-            if collection:contains(name) then
-                if not results[slip_name] then
-                    results[slip_name] = L{}
-                end
-                results[slip_name]:append(add_result(name,slip_name,1))
-                local m = results.missing:find(name)
-                if m then
-                    results.missing:remove(m)
-                end
-                results.owned:append(name)                
-            end
+            curate_collection(collection, name, results, slip_name)            
         end
+    end
+    
+    local key_items_owned = windower.ffxi.get_key_items()
+    for i = 1, #key_items_owned do
+        local name = key_items[key_items_owned[i]].name
+        curate_collection(collection, name, results, 'key items')
     end
     
     --table.vprint(results)
@@ -81,7 +84,7 @@ function curate(set)
     log('Results:')
     for i=#results.missing,1,-1 do
         local name = results.missing[i]
-        local item = res_items:with('name',name)
+        local item = res_items:with('name',name) or key_items:with('name',name)
         if not item then
             log('invalid item:',name:color(123)..'.','Check the spelling!')
             results.missing:remove(i)
