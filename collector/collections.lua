@@ -22,14 +22,31 @@ return T{
                             "Jeunoan Flag", "Fourth Staff", "Ram Staff", "Cobra Staff", "Moonshade Earring", --wotg
                             "Mirke Wardecors", "Nuevo Coselete", "Royal Redingote", 
                             "Champion's Galea", "Anwig Salade", "Selenian Cap", 
-                            "Blitzer Poleyn", "Desultor Tassets", "Tatsu. Sitagoromo", }, -- addon scenarions
+                            "Blitzer Poleyn", "Desultor Tassets", "Tatsu. Sitagoromo",  }, -- addon scenarions
     ['adoulin'] = { "Adoulin's Refuge", "Ygnas's Resolve", "Arciela's Grace", "Adoulin's Refuge +1", "Ygnas's Resolve +1", "Arciela's Grace +1", -- adoulin has _way_ too much possible stuff.
                     "Councilor's Cuffs", "Councilor's Garb", 
                     "Adoulin Ring", "Gorney Ring", "Haverton Ring", "Janniston Ring", "Karieyh Ring", "Orvail Ring", 
                     "Renaye Ring", "Shneddick Ring", "Thurandaut Ring", "Vocane Ring", "Weather. Ring", "Woltaris Ring", 
                     "Delegate's Cuffs", "Delegate's Garb", 
                     "Adoulin Ring +1", "Gorney Ring +1", "Haverton Ring +1", "Jann. Ring +1", "Karieyh Ring +1", "Orvail Ring +1", 
-                    "Renaye Ring +1", "Shneddick Ring +1", "Thur. Ring +1", "Vocane Ring +1", "Weather. Ring +1", "Woltaris Ring +1", },
+                    "Renaye Ring +1", "Shneddick Ring +1", "Thur. Ring +1", "Vocane Ring +1", "Weather. Ring +1", "Woltaris Ring +1",   },
+    ['monster mementos'] = { "abyssal wyrm memento", "abyssobugard memento", "adamantoise memento", "adenium memento", "ake-ome memento", 
+                             "alabaster lizard memento", "baby adamantoise memento", "baby cockatrice memento", "baby colibri memento", 
+                             "baby eft memento", "baby lizard memento", "baby rabbit memento", "baby raptor memento", "behemoth cub memento",
+                             "behemoth memento", "blazing wyrm memento", "blue sea monk memento", "blue wyvern memento", "bomb memento", 
+                             "buffalo calf memento", "buffalo memento", "bugard memento", "citrullus memento", "clot memento", "cluster memento",
+                             "cockatrice memento", "coeurl cub memento", "coeurl memento", "colibri memento", "crab memento", "dhalmel calf memento",
+                             "dhalmel memento", "djinn memento", "dragon hatchling memento", "eft memento", "elasmoth memento", 
+                             "elder adenium memento", "elder mandragora memento", "ferromantoise memento", "great adamantoise memento", 
+                             "great dhalmel memento", "great ferromantoise memento", "green foliage treant memento", "green wyvern memento", 
+                             "hecteyes memento", "immature crab memento", "jumbotender memento", "karakul memento", "king behemoth memento", 
+                             "korrigan memento", "lamb memento", "limascabra memento", "lizard memento", "lunar wyrm memento", "lycopodium memento",
+                             "lynx memento", "mandragora memento", "mandragora sproutling memento", "mini slime memento", "pachypodium memento",
+                             "pequetender memento", "porter crab memento", "rabbit memento", "ram memento", "raptor memento", 
+                             "red foliage treant memento", "red raptor memento", "sabotender memento", "sapling memento", "sea monk larva memento",
+                             "sea monk memento", "sheep memento", "skormoth memento", "slime memento", "snoll memento", "tarichuk memento", 
+                             "tiny bugard memento", "toucalibri memento", "uragnite memento", "uragnite youngling memento", 
+                             "white adamantoise memento", "white rabbit memento", "wyvern memento", "ziz memento"    },
     ['twilight'] = { "Twilight Cape", "Twilight Knife", "Twilight Scythe", "Twilight Helm", "Twilight Mail", "Twilight Cloak", "Twilight Torque", "Twilight Belt", }, -- twilight set from Shinryu
     ['dynamis currency'] = {"1 Byne Bill", "O. Bronzepiece", "T. Whiteshell", "100 Byne Bill", "M. Silverpiece", "L. Jadeshell", "10,000 Byne Bill", "R. Goldpiece", "R. Stripeshell",},
     ['relic'] = { "Aegis", "Gjallarhorn", "Mandau", "Ragnarok", "Apocalypse", "Annihilator", "Amanomurakumo", "Excalibur", "Yoichinoyumi", "Spharai", "Kikoku", "Bravura", "Gungnir", "Guttler", "Mjollnir", "Claustrum", },
