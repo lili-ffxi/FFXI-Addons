@@ -1,3 +1,8 @@
+local custom = T{}
+if windower.file_exists(windower.addon_path..'custom.lua') then
+    custom = require('custom')
+end
+
 return T{
     ['reive capes'] = { "Mauler's Mantle", "Anchoret's Mantle", "Mending Cape", "Bane Cape", "Ghostfyre Cape", "Canny Cape", 
                         "Weard Mantle", "Niht Mantle", "Pastoralist's Mantle", "Rhapsode's Cape", "Lutian Cape", "Takaha Mantle", 
@@ -67,6 +72,6 @@ return T{
     ['odin htbf'] = {"Geirrothr","Zantetsuken","Zantetsuken X","Hjarrandi Helm","Hjarrandi Breast.","Freke Ring","Gere Ring"},
     ['alex htbf'] = {"Sacro Bulwark","Sacro Breastplate","Sacro Gorget","Sacro Cord","Sacro Mantle",},
     ['shinryu htbf'] = {"Crepuscular Knife","Crepuscular Pebble","Crepuscular Scythe","Crepuscular Helm","Crepuscular Cloak","Crepuscular Mail","Crepuscular Ring","Crepuscular Earring"},
-}
+}:update(custom)
 
 -- TODO: make it check key items too
