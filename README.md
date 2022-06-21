@@ -25,6 +25,7 @@ Complete addons:
 - special: makes you feel special.
 - position_manager: frontend for the wincontrol plugin to set position and screen size per character. DO NOT USE THIS, download it from windower instead.
 - statsearch: full text search of the gear you own, filtered (or not) by job. Need to know what pieces you can equip that have Magic Defense? Now you can.
+- collector: display owned and missing items from an item set. Want to know how many reive capes you have? Pulse weapons? Llith drops?
 
 Incomplete addons:
 - Friendzone: automatically calls trusts over and over. A bit bugged but workable.
