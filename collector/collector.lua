@@ -1,7 +1,7 @@
 _addon.name = 'Collector'
 _addon.author = 'Lili'
-_addon.version = '0.1.1'
-_addon.commands = {'memnon','collection','col'}
+_addon.version = '0.1.2'
+_addon.commands = {'memnon','collector','col'}
 
 require('chat')
 require('logger')
