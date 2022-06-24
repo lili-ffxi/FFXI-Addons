@@ -1,4 +1,4 @@
-_addon.subversion = '2'
+_addon.subversion = '3'
 
 local custom = T{}
 if windower.file_exists(windower.addon_path..'custom.lua') then
@@ -88,6 +88,12 @@ return T{
                             "Dusktip Stone", "Dusktip Stone +1", "Dusktip Stone +2",
                             "Duskdim Stone", "Duskdim Stone +1", "Duskdim Stone +2",
                             "Duskorb Stone", "Duskorb Stone +1", "Duskorb Stone +2",    },
+    ["omen rewards"] = {    "Adapa Shield", "Nusku Shield", "Anu Torque", "Sherida Earring", "Enki Strap", "Erra Pendant", "Kishar Ring", "Adad Amulet", 
+                            "Knobkierrie", "Ammurapi Shield", 
+                            "Nisroch Jerkin", "Ashera Harness", "Shamash Robe", "Dagon Breast.", "Udug Jacket", 
+                            "Niqmaddu Ring", "Shulmanu Collar", "Dingir Ring", "Yamarang", "Lugalbanda Earring", "Ilabrat Ring", "Utu Grip",                            "Enmerkar Earring", "Iskur Gorget", 
+                            "Regal Cpt. Gloves", "Regal Cuffs", "Regal Gauntlets", "Regal Gloves", "", "Regal Belt", "Regal Earring", 
+                            "Regal Gem", "Regal Necklace", "Regal Ring",    },
     -- HTMBs
     ['htmb key items'] = {"Shadow Lord phantom gem", "Celestial Nexus phantom gem", "Stellar Fulcrum phantom gem", "phantom gem of apathy", "phantom gem of arrogance", "phantom gem of envy", "phantom gem of cowardice", "phantom gem of rage", "P. Perpetrator phantom gem", "Savage's phantom gem", "Warrior's Path phantom gem", "Puppet in Peril phantom gem", "Legacy phantom gem", "Head Wind phantom gem", "avatar phantom gem", "Moonlit Path phantom gem", "Waking the Beast phantom gem", "Waking Dreams phantom gem", "Feared One phantom gem", "Dawn phantom gem", "Stygian Pact phantom gem", "Champion phantom gem", "Divine phantom gem", "Maiden phantom gem", "Wyrm God phantom gem",},
     ['lilith htmb'] = { "Daybreak", "Malignance Pole", "Malignance Sword", "Malignance Earring", "Malignance Chapeau", "Malignance Tabard", "Malignance Gloves", "Malignance Tights", "Malignance Boots",},
