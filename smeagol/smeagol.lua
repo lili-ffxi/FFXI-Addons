@@ -402,11 +402,6 @@ windower.register_event('outgoing chunk',function(id,data,modified,is_injected,i
     if id == 0x015 then
         moving = lastlocation ~= modified:sub(5, 16)
         lastlocation = modified:sub(5, 16)
-
-		-- if wasmoving ~= moving then
-			-- log(moving and 'moving' or 'stopped')
-		-- end
-		-- wasmoving = moving
     end
 end)
 
