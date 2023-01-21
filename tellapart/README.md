@@ -1,4 +1,4 @@
-# Tellapart v1.1.1.
+# Tellapart v1.1.3.
 
 This addon adds letters at the end of enemy mob names, for the purpose of telling them apart. It will add letters from the range of A to ZZ, which I assume is going to be enough forever because to get past ZZ it would mean 700 identical mobs of the same name in zone, and I can't see that happen ever.  
 
