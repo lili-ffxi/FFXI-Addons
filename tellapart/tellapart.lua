@@ -1,6 +1,6 @@
 _addon.name = 'tellapart'
 _addon.author = 'Lili'
-_addon.version = '1.1.1'
+_addon.version = '1.1.3'
 
 packets = require('packets')
 
@@ -18,7 +18,7 @@ local active
             "Aht Urhgan Whitegate", "Nashmau",
             "Western Adoulin", "Eastern Adoulin", "Celennia Memorial Library",
             "Bastok-Jeuno Airship", "Kazham-Jeuno Airship", "San d'Oria-Jeuno Airship", "Windurst-Jeuno Airship",
-            "Chocobo Circuit", "Feretory", "Mog Garden",
+            "Chocobo Circuit", "Feretory", "Mog Garden", Pankration
     Enabled in city-like areas where mobs can appear:
             "Al Zahbi", "Southern San d'Oria (S)", "Bastok Markets (S)", "Windurst Waters (S)",
             "Walk of Echoes", "Provenance",
@@ -26,7 +26,7 @@ local active
             "Silver Sea route to Al Zahbi", "Silver Sea route to Nashmau", "Manaclipper", "Phanauet Channel", 
 ]]
 
-local Cities = S{ 70, 247, 256, 249, 244, 234, 245, 257, 246, 248, 230, 53, 236, 233, 223, 238, 235, 226, 239, 240, 232, 250, 231, 284, 242, 26, 252, 280, 285, 225, 224, 237, 50, 241, 243 }
+local Cities = S{ 70, 247, 256, 249, 244, 234, 245, 257, 246, 248, 230, 53, 236, 233, 223, 238, 235, 226, 239, 240, 232, 250, 231, 284, 242, 26, 252, 280, 285, 225, 224, 237, 50, 241, 243, 71 }
 
 function letter_suffix(num)
     local s = ''
@@ -61,11 +61,16 @@ function prepare_names()
         end
     end
 
-    function countmobs()  
+    function countmobs()
+        local sorted = {}
         for i,v in pairs(duplicates) do
             if v.n > 1 then
-                windower.add_to_chat(207,'tellapart: %s: %s':format(i,v.n)) 
+                sorted[#sorted+1] = i
             end
+        end
+        table.sort(sorted)
+        for i,v in pairs(sorted) do
+            windower.add_to_chat(207,'tellapart: %s: %s':format(v,duplicates[v].n))
         end
     end
     
