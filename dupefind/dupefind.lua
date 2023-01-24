@@ -58,6 +58,7 @@ example:
 
 Changelog
 
+0.5.3 - Added wardrobes 5-8 (how come nobody complained all this time?)
 0.5.2 - Minor fix.
 0.5.1 - Cleanup and better help text.
 0.4 - Some more cleanup.
@@ -71,7 +72,7 @@ Thanks to Arcon, he took the time to read my original iterations and letting me 
 
 _addon.name = 'dupefind'
 _addon.author = 'Lili'
-_addon.version = '0.5.2'
+_addon.version = '0.5.3'
 _addon.commands = {'dupefind','dupe', 'df',}
 
 require('logger')
@@ -93,7 +94,7 @@ function preferences()
 	filter_by_player = true
 end
 
-bags = S{'safe','safe2','storage','locker','inventory','satchel','sack','case','wardrobe','wardrobe2','wardrobe3','wardrobe4'}
+bags = S{'safe','safe2','storage','locker','inventory','satchel','sack','case','wardrobe','wardrobe2','wardrobe3','wardrobe4','wardrobe5','wardrobe6','wardrobe7','wardrobe8'}
 
 -------------------------------------------------------------------------------------------------------------
 preferences()
