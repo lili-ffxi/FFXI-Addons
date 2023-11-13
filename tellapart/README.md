@@ -9,7 +9,7 @@ Names are changed in a way that they are identical across different clients, eve
 
 Couple known quirks:  
 - if there's only one mob with that name in the zone, it will not be renamed. A known offender is that one lone Locus Lugcrawler in Crawler's Next [S]. There's only one in the entire zone, so no letter for him. There might be more somewhere else.  
-- some NMs have multiple copies of themselves that are spawnable - Unity NMs, Geas Fete, but also Abyssea etc. This is normal and there's no way to know that they are NMs instead of regular mobs, so enjoy your Apayec A-B-C-D  
+- some NMs have multiple copies of themselves that are spawnable - Unity NMs, Geas Fete, but also Abyssea etc. This is normal and there's no way to know that they are NMs instead of regular mobs, so enjoy your Ayapec A-B-C-D  
 - there's a global 23 characters limit to mob names. So, mobs whose names is longer than 20 characters get their name truncated to make space for the letters. I don't see this causing issues in general, but if it does do let me know.  
 - it's inactive inside of those areas that do not have killable mobs (mostly cities).
 - due to the way renaming works, it's doing some work per every frame. If you run at 30fps on a regular pc it should not matter, but if you are playing on a potato or have 8 instances loaded all running at 120fps and have been roaming a lot in any given zone, you might see your fps drop or your instance stutter. Lower your fps a bit to prevent that, or don't run it on *all* of your boxes.  
