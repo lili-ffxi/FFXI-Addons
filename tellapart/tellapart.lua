@@ -1,13 +1,14 @@
 _addon.name = 'tellapart'
 _addon.author = 'Lili'
-_addon.version = '1.1.3'
+_addon.version = '1.1.4'
+_addon.commands = { 'tellapart', 'ta' }
 
 packets = require('packets')
 
 local renames = {}
 local zonecache = {}
 
-local active
+local mask = true
 
 --[[ Disabled by default in cities:
             "Northern San d'Oria", "Southern San d'Oria", "Port San d'Oria", "Chateau d'Oraguille",
@@ -18,7 +19,7 @@ local active
             "Aht Urhgan Whitegate", "Nashmau",
             "Western Adoulin", "Eastern Adoulin", "Celennia Memorial Library",
             "Bastok-Jeuno Airship", "Kazham-Jeuno Airship", "San d'Oria-Jeuno Airship", "Windurst-Jeuno Airship",
-            "Chocobo Circuit", "Feretory", "Mog Garden", Pankration
+            "Chocobo Circuit", "Feretory", "Mog Garden", "The Colosseum"
     Enabled in city-like areas where mobs can appear:
             "Al Zahbi", "Southern San d'Oria (S)", "Bastok Markets (S)", "Windurst Waters (S)",
             "Walk of Echoes", "Provenance",
@@ -88,7 +89,7 @@ function prepare_names()
     
     for idx in pairs(zonecache) do
         local t = windower.ffxi.get_mob_by_index(idx)
-        if t and t.spawn_type == 0x010 then
+        if t and (t.spawn_type == 0x010) then
             renames[t.id] = zonecache[idx]
             zonecache[idx] = nil
         end
@@ -144,5 +145,27 @@ windower.register_event('prerender', function()
     
     for i,v in pairs(renames) do
         windower.set_mob_name(i,v)
+    end
+end)
+
+windower.register_event('outgoing text',function(_,mod,block)
+    if block or not mask then
+        return
+    end
+    
+    if mod:find('<t>') then
+        local t = windower.ffxi.get_mob_by_target('t')
+        if t and renames[t.id] then
+            local name = t.name:gsub('(%s%u%u?)$','')
+            return mod:gsub('<t>',name)
+        end
+    end
+end)
+
+windower.register_event('addon command',function(arg)
+    arg = arg:lower()
+    if arg:startswith('mask') then
+        mask = not mask
+        windower.add_to_chat(207, _addon.name..': Chat masking is now '..tostring(mask):upper())
     end
 end)
