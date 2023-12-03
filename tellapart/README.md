@@ -1,4 +1,4 @@
-# Tellapart v1.1.3.
+# Tellapart v1.1.4.
 
 This addon adds letters at the end of enemy mob names, for the purpose of telling them apart. It will add letters from the range of A to ZZ, which I assume is going to be enough forever because to get past ZZ it would mean 700 identical mobs of the same name in zone, and I can't see that happen ever.  
 
@@ -19,4 +19,6 @@ Lastly, one last buywer's beware: this breaks bots. Do not come asking me suppor
 
 Apart from the above, it should work anywhere, even instanced zones. It's pretty sturdy.  
 
-There's no commands available. Load it and it's on, unload it and it's off.  
+Load it and it's on, unload it and it's off.  
+One command available:
+_//ta mask_: removes the appended letters from the current target's name when using the <t> pronoun in chat. Enabled by default.
