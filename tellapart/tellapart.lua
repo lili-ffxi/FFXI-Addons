@@ -1,6 +1,6 @@
 _addon.name = 'tellapart'
 _addon.author = 'Lili'
-_addon.version = '1.1.4'
+_addon.version = '1.2.0'
 _addon.commands = { 'tellapart', 'ta' }
 
 packets = require('packets')
