@@ -4,6 +4,9 @@ A collection of addons I wrote for Final Fantasy XI, compatible with the [Window
 ## NOTE:
 As of 28/07/2021, I am on hiatus. I decided I want to take my life in a different direction and coding and FFXI are incompatible with that. Knowing myself, I might still come back eventually, but for now I'm determined not to. The content of this repo is as such to be considered abandoned, at least temporarily, but with no resume date in sight. Have fun and thanks for all the laughs.
 
+## NOTE 2:
+As of Summer 2023, I'm back, at least for now, so the repo is un-abandoned and if you find bugs pls post on ffxiah or here so I can fix them.
+
 Addons to fix issues on private servers:
 - chatfix (fixes empty or garbled chat messages)
 - menufix (fixes crash when opening the status menu)
