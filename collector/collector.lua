@@ -1,7 +1,7 @@
 _addon.name = 'Collector'
 _addon.author = 'Lili'
-_addon.version = '0.1.2'
-_addon.commands = {'memnon','collector','col'}
+_addon.version = '0.1.5'
+_addon.commands = {'collection','collection','col'}
 
 require('chat')
 require('logger')
@@ -14,6 +14,8 @@ local key_items = require('resources').key_items
 local collections = require('collections') 
 
 bags = L{'safe','safe2','storage','locker','inventory','satchel','sack','case','wardrobe','wardrobe2','wardrobe3','wardrobe4','wardrobe5','wardrobe6','wardrobe7','wardrobe8',}
+
+-- bags = res.bags:map(function(bag) return bag.en:lower():stripchars(' ') end) -- Do you need this to be an ordered list?
 
 sorted_bags = L{'safe', 'safe2', 'storage', 'locker', 
                 'satchel', 'sack', 'case', 'inventory', 
@@ -54,7 +56,7 @@ function curate(set)
                 owned = L{},
             }
     
-	for _,bag in ipairs(bags) do 
+	for _, bag in ipairs(bags) do 
 		for i = 1, inventory[bag].max do
 			data = inventory[bag][i]
 			if data.id ~= 0 then
@@ -64,18 +66,17 @@ function curate(set)
         end
     end
 
-    local slip_storages = slips.get_player_items()
-    for _, slip_id in ipairs(slips.storages) do
-        local slip_name = 'slip '..tostring(slips.get_slip_number_by_id(slip_id)):lpad('0', 2)
-        for _, id in ipairs(slip_storages[slip_id]) do
-            local name = res_items[id].name
-            curate_collection(collection, name, results, slip_name)            
-        end
-    end
+    -- local slip_storages = slips.get_player_items()
+    -- for _, slip_id in ipairs(slips.storages) do
+        -- local slip_name = 'slip '..tostring(slips.get_slip_number_by_id(slip_id)):lpad('0', 2)
+        -- for _, id in ipairs(slip_storages[slip_id]) do
+            -- local name = res_items[id].name
+            -- curate_collection(collection, name, results, slip_name)            
+        -- end
+    -- end
     
-    local key_items_owned = windower.ffxi.get_key_items()
-    for i = 1, #key_items_owned do
-        local name = key_items[key_items_owned[i]].name
+    for _, id in ipairs(windower.ffxi.get_key_items()) do
+        local name = key_items[id].name
         curate_collection(collection, name, results, 'key items')
     end
     
@@ -123,17 +124,34 @@ windower.register_event('addon command', function(...)
     elseif mode == 'u' or mode == 'unload' then
         cmd('lua u '.._addon.name)
         return
-        
-    elseif mode == 'missing' then
+    
+    elseif mode == 'search' or mode == 'find' then
         table.remove(args,1)
-        log('missing only')
+        local arg = args:concat(' '):lower()
+        log("Search results for '%s'":format(arg:color(258)))
+        for i, v in pairs(collections) do
+            if i:find(arg) then
+                log('Found collection:', i:color(258))
+            end
+            for j,k in pairs(v) do
+                if type(k) ~= 'string' then print(j,k) end
+                if tostring(k):lower():find(arg) then
+                    log('Found item:', k:color(258), '('..i..')')
+                end
+            end
+        end
+        return
         
-    elseif mode == 'owned' then
-        table.remove(args,1)
-        log('owned only')
+    -- elseif mode == 'missing' then
+        -- table.remove(args,1)
+        -- log('missing only')
+
+    -- elseif mode == 'owned' then
+        -- table.remove(args,1)
+        -- log('owned only')
         
-    else
-        mode = default_mode
+    -- else
+        -- mode = default_mode
         
     end
     
