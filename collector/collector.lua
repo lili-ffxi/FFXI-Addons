@@ -1,6 +1,6 @@
 _addon.name = 'Collector'
 _addon.author = 'Lili'
-_addon.version = '0.1.5'
+_addon.version = '0.1.6'
 _addon.commands = {'collection','collection','col'}
 
 require('chat')
@@ -66,14 +66,14 @@ function curate(set)
         end
     end
 
-    -- local slip_storages = slips.get_player_items()
-    -- for _, slip_id in ipairs(slips.storages) do
-        -- local slip_name = 'slip '..tostring(slips.get_slip_number_by_id(slip_id)):lpad('0', 2)
-        -- for _, id in ipairs(slip_storages[slip_id]) do
-            -- local name = res_items[id].name
-            -- curate_collection(collection, name, results, slip_name)            
-        -- end
-    -- end
+    local slip_storages = slips.get_player_items()
+    for _, slip_id in ipairs(slips.storages) do
+        local slip_name = 'slip '..tostring(slips.get_slip_number_by_id(slip_id)):lpad('0', 2)
+        for _, id in ipairs(slip_storages[slip_id]) do
+            local name = res_items[id].name
+            curate_collection(collection, name, results, slip_name)            
+        end
+    end
     
     for _, id in ipairs(windower.ffxi.get_key_items()) do
         local name = key_items[id].name
