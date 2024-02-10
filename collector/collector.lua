@@ -10,6 +10,7 @@ require('tables')
 local slips = require('slips')
 local res_items = require('resources').items
 local key_items = require('resources').key_items
+local extdata = require('extdata')
 
 local collections = require('collections') 
 
@@ -26,18 +27,19 @@ sorted_bags = L{'safe', 'safe2', 'storage', 'locker',
                 'slip 21', 'slip 22', 'slip 23', 'slip 24', 'slip 25', 'slip 26', 'slip 27', 'slip 28', 'slip 29', 'slip 30',
                 'slip 31', 'key items', }
 
-function add_result(result,bag,count)
+
+function add_result(result,bag,count,augments)
     local count = count > 1 and ' ('..count..')' or ''
-    return (bag == 'missing' and result:color(259) or result:color(258)) .. count
+    return (bag == 'missing' and result:color(259) or result:color(258)) .. count .. (augments ~= nil and augments.rank ~= nil and " R" ..augments.rank or "")
 end
 
-function curate_collection(collection, name, results, bag, count)
+function curate_collection(collection, name, results, bag, count, augments)
     local count = count or 1
     if collection:contains(name) then
         if not results[bag] then
             results[bag] = L{}
         end
-        results[bag]:append(add_result(name,bag,count))
+        results[bag]:append(add_result(name,bag,count,augments))
         local m = results.missing:find(name)
         if m then
             results.missing:remove(m)
@@ -56,12 +58,14 @@ function curate(set)
                 owned = L{},
             }
     
+            
 	for _, bag in ipairs(bags) do 
 		for i = 1, inventory[bag].max do
 			data = inventory[bag][i]
 			if data.id ~= 0 then
                 local name = res_items[data.id].name
-                curate_collection(collection, name, results, bag, data.count)
+                local ext = extdata.decode(data)
+                curate_collection(collection, name, results, bag, data.count, ext)
 			end
         end
     end
