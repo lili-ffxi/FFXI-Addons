@@ -122,4 +122,32 @@ return T{
     ['znm pop items'] = {"Hellcage Butterfly", "Floral Nectar", "Rodent Cheese", "Shadeleaf", "Pectin", "Cog Lubricant", "Golden Teeth", "Greenling", "Spoilt Blood", "Senorita Pamama", "Samariri Corpsehair", "Oily Blood", "Raw Buffalo", "Bone Charcoal", "Granulated Sugar", "M. No. 11 Molting", "Mint Drop", "Opalus Gem", "Ferrite", "Sheep Botfly", "Olzhiryan Cactus", "Pure Blood", "Vinegar Pie", "Rock Juice", "Exorcism Treatise", "Myrrh", "Rose Scampi", "Monkey Wine", "Buffalo Corpse", "Singed Buffalo", "Pandemonium Key", },
     ['znm pop kis'] = {"maroon seal", "cerise seal", "pine green seal", "apple green seal", "salmon-colored seal", "amber-colored seal", "charcoal grey seal", "deep purple seal", "chestnut-colored seal", "purplish grey seal", "gold-colored seal", "copper-colored seal", "fallow-colored seal", "taupe-colored seal", "sienna-colored seal", "lilac-colored seal", "bright blue seal", "lavender-colored seal",},
     ['znm drops'] = {"Vulpangue's Wing", "Chamrosh's Beak", "Gigiroon's Cape", "B. Borer's Cocoon", "Claret Globule", "Ob's Arm", "Velionis's Bone", "Lil' Apkallu's Egg", "Chigre", "Iriz Ima's Hide", "Iriri Samariri's Hat", "Amoosh.'s Tendril", "Anantaboga's Heart", "Reacton's Ashes", "Dextrose's Blubber", "Zrkl.'s Neckpiece", "Verdelet's Wing", "Wulgaru's Head", "A. Gears' Fragment", "G. Zha's Necklace", "Dea's Horn", "Nosferatu's Claw", "Bblr.'s Vambrace", "Acham.'s Antenna", "Mahjlaef's Staff", "Ex. Lamia Armband", "Nuhn's Esca", "Tinnin's Fang", "Sarameya's Hide", "Tyger's Tail", },
+
+    -- HELM pop sets for specific NMs
+    ['albumen'] = {'Vermihumus', 'Coalition Humus', 'Ashweed','Void Grass'},
+    ['erinys'] = {'tornado','mistmelt','Voidsnapper','Ashweed'},
+    ['onychophora'] = {'titanite','Worm Mulch','void crystal','void grass'},
+    ['schah'] = {'leisure table','trump card case','voidsnapper','gravewood log'},
+    ['teles'] = {"maiden's virelai","siren's hair",'void crystal','voidsnapper'},
+    ['vinipata'] = {'scarletite ingot', 'bone chip','Void Crystal','Duskcrawler'},
+    ['zerde'] = {'Black Pudding', 'Flan Meat', 'Void Grass','Ashen Crayfish'},
+    -- Sheol NM pops
+    ['sheol c'] = {"Hidhaegg's Scale", "Sovereign's Hide", "Tumult's Blood","Shedu's Mane","Tolba's Shell","Sarama's Hide","Thu'ban's Scale"},
+    ['sheol b'] = {"Vermillion's Wing","Specter's Ore","Centurio's Armor","Coca's Wing","Largantua's Shard","Azrael's Eye","Mephitas's Claw","Glazemane's Fang","Vidmapire's Claw","Clawberry's Coat","V. Cluster's Ash","Arke's Wing","Muut's Vestment","G. Grenade's Ash","Beist's Blood","Vedrfolnir's Wing","Jill's Spittle","Celine's Vine","Ayapec's Shell","Camahueto's Fur","Douma's Shard","Mhuufya's Beak","Ethereal Incense","Uropygid's Needle","Bakunawa's Ink","Bambrox's Shawl","Strix's Tailfeather"},
+    ['sheol a'] = {"Abyssdiver Feather","Voso's Hide","Arthro's Shell","Veloz's Needle","Joyous's Moss", "Orcfeltrap's Leaf","Heiligtum's Moss","G. Gel's Mucus","Malatrix's Shard","Immani. Hide", "Tiyanak's Fang", "Warblade's Hide", "Samantha's Vine","Mender's Log","Intuila's Hide","Imperator's Wing"},
+    
+    ['meds'] = {'Hi-Reraiser','Reraiser','Panacea','Remedy','Echo Drops',},
+    -- assault books: todo augments on these
+    ['assault'] = {'Leujaoam Log','Mamool Ja Journal','Lebros Chronicle','Periqia Diary','Ilrusi Ledger'},
+    ['incursion']={"Ymmr-Ulvid's necklace", "Ignor-Mnt's bracelet","Durs-Vike's earring","Tryl-Wuj's belt","pair of Liij-Vok's gloves","Gramk-Droog's circlet" },
+    ['stone mufflers']={'Brass Letterbox','Bronze Letterbox','Shakudo Letterbox','Paktong Letterbox', 'Pig Iron Letterbox','Iron Letterbox','Cst. Irn. Letterbox','Wrt. Irn. Letterbox'},
+    -- odyssey gear
+    ['sakpata']={"Sakpata's Sword","Sakpata's Plate","Sakpata's Leggings","Sakpata's Cuisses","Sakpata's Helm","Sakpata's Gauntlets"},
+    ['nyame']={"Nyame Helm","Nyame Mail","Nyame Gauntlets","Nyame Flanchard","Nyame Sollerets"},
+    ['gleti']={"Gleti's Mask","Gleti's Gauntlets","Gleti's Cuirass","Gleti's Breeches","Gleti's Boots","Gleti's Knife"},
+    ['bunzi']={"Bunzi's Hat", "Bunzi's Robe","Bunzi's Gloves","Bunzi's Pants", "Bunzi's Sabots", "Bunzi's Rod"},
+    ['mpaca']={"Mpaca's Staff","Mpaca's Cap","Mpaca's Doublet","Mpaca's Gloves","Mpaca's Hose","Mpaca's Boots"},
+    ['ikenga']={"Ikenga's Axe","Ikenga's Hat","Ikenga's Vest","Ikenga's Gloves","Ikenga's Trousers","Ikenga's Clogs"},
+    ['agwu']={"Agwu's Axe","Agwu's Cap","Agwu's Robe","Agwu's Gages","Agwu's Slops","Agwu's Pigaches"},
+
 }:update(custom)
