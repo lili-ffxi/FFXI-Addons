@@ -1,6 +1,6 @@
 _addon.name = 'Collector'
 _addon.author = 'Lili'
-_addon.version = '0.1.6'
+_addon.version = '0.1.7'
 _addon.commands = {'collection','collection','col'}
 
 require('chat')
@@ -23,8 +23,8 @@ sorted_bags = L{'safe', 'safe2', 'storage', 'locker',
                 'wardrobe5', 'wardrobe6', 'wardrobe7','wardrobe8', 
                 'slip 01', 'slip 02', 'slip 03', 'slip 04', 'slip 05', 'slip 06', 'slip 07', 'slip 08', 'slip 09', 'slip 10', 
                 'slip 11', 'slip 12', 'slip 13', 'slip 14', 'slip 15', 'slip 16', 'slip 17', 'slip 18', 'slip 19', 'slip 20', 
-                'slip 21', 'slip 22', 'slip 23', 'slip 24', 'slip 25', 'slip 26', 'slip 27', 'slip 28', 
-                'key items', }
+                'slip 21', 'slip 22', 'slip 23', 'slip 24', 'slip 25', 'slip 26', 'slip 27', 'slip 28', 'slip 29', 'slip 30',
+                'slip 31', 'key items', }
 
 function add_result(result,bag,count)
     local count = count > 1 and ' ('..count..')' or ''
