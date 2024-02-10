@@ -1,6 +1,6 @@
 _addon.name = 'Collector'
 _addon.author = 'Lili'
-_addon.version = '0.1.7'
+_addon.version = '0.2.0'
 _addon.commands = {'collection','collection','col'}
 
 require('chat')
@@ -30,7 +30,8 @@ sorted_bags = L{'safe', 'safe2', 'storage', 'locker',
 
 function add_result(result,bag,count,augments)
     local count = count > 1 and ' ('..count..')' or ''
-    return (bag == 'missing' and result:color(259) or result:color(258)) .. count .. (augments ~= nil and augments.rank ~= nil and " R" ..augments.rank or "")
+    local rank = augments ~= nil and augments.rank ~= nil and ' Rank: %s':format(augments.rank) or ''
+    return (bag == 'missing' and result:color(259) or result:color(258)) .. count .. rank
 end
 
 function curate_collection(collection, name, results, bag, count, augments)
@@ -39,7 +40,7 @@ function curate_collection(collection, name, results, bag, count, augments)
         if not results[bag] then
             results[bag] = L{}
         end
-        results[bag]:append(add_result(name,bag,count,augments))
+        results[bag]:append(add_result(name, bag, count, augments))
         local m = results.missing:find(name)
         if m then
             results.missing:remove(m)
@@ -49,15 +50,9 @@ function curate_collection(collection, name, results, bag, count, augments)
 end
 
 function curate(set)
-    
     local collection = L(collections[set])
     local inventory = windower.ffxi.get_items()
-
-    local results = T{
-                missing = collection:copy(),
-                owned = L{},
-            }
-    
+    local results = T{ missing = collection:copy(), owned = L{}, }
             
 	for _, bag in ipairs(bags) do 
 		for i = 1, inventory[bag].max do
@@ -84,31 +79,29 @@ function curate(set)
         curate_collection(collection, name, results, 'key items')
     end
     
-    --table.vprint(results)
-    
     log('Results:')
     for i=#results.missing,1,-1 do
         local name = results.missing[i]
-        local item = res_items:with('name',name) or key_items:with('name',name)
+        local item = res_items:with('name', name) or key_items:with('name', name)
         if not item then
-            log('invalid item:',name:color(123)..'.','Check the spelling!')
+            log('invalid item:', name:color(123)..'.', 'Check the spelling!')
             results.missing:remove(i)
         else
-            log('missing:',name:color(259))
+            log('missing:', name:color(259))
         end
     end
 
     for _,bag in ipairs(sorted_bags) do 
         if results[bag] then
             for _,item in ipairs(results[bag]) do
-                log('%s: %s':format(bag,item))
+                log('%s: %s':format(bag, item))
             end
         end
     end
     
-    log(set..':\n',results.owned.n,'owned /',results.missing.n,'missing')
+    log(set..':\n', results.owned.n, 'owned /', results.missing.n, 'missing')
     if results.owned.n + results.missing.n > #collection then
-        log(' ' .. #collection,'unique items in the set.')
+        log(' ' .. #collection, 'unique items in the set.')
     end
 end
 
