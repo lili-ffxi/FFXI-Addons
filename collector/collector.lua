@@ -162,11 +162,7 @@ windower.register_event('addon command', function(...)
         end
         
         log('Usage:\n//col <collection name>\nAvailable collections:')
-        for k,v in pairs(collections) do
-            if #v > 1 then 
-                log('\t',k)
-            end
-        end
+        table.print(collections:keyset())
     end
 end)
 
