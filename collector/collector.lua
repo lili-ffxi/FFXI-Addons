@@ -30,7 +30,7 @@ sorted_bags = L{'safe', 'safe2', 'storage', 'locker',
 
 function add_result(result,bag,count,augments)
     local count = count > 1 and ' ('..count..')' or ''
-    local rank = augments ~= nil and augments.rank ~= nil and ' Rank: %s':format(augments.rank) or ''
+    local rank = augments ~= nil and augments.rank ~= nil and ' (Rank: %s)':format(augments.rank) or ''
     return (bag == 'missing' and result:color(259) or result:color(258)) .. count .. rank
 end
 
