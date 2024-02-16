@@ -1,11 +1,11 @@
 # Lili's Addons
 A collection of addons I wrote for Final Fantasy XI, compatible with the [Windower launcher](http://windower.net/).  
 
-## NOTE:
-As of 28/07/2021, I am on hiatus. I decided I want to take my life in a different direction and coding and FFXI are incompatible with that. Knowing myself, I might still come back eventually, but for now I'm determined not to. The content of this repo is as such to be considered abandoned, at least temporarily, but with no resume date in sight. Have fun and thanks for all the laughs.
+SUPPORT DISCORD: https://discord.gg/uBPg7quNxD
 
-## NOTE 2:
-As of Summer 2023, I'm back, at least for now, so the repo is un-abandoned and if you find bugs pls post on ffxiah or here so I can fix them.
+DONATE TO SUPPORT: dunno how send me a mail and we'll figure something out.
+
+-- 
 
 Addons to fix issues on private servers:
 - chatfix (fixes empty or garbled chat messages)
