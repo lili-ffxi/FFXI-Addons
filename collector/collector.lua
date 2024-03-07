@@ -1,6 +1,6 @@
 _addon.name = 'Collector'
 _addon.author = 'Lili'
-_addon.version = '0.2.0'
+_addon.version = '0.2.1'
 _addon.commands = {'collection','collection','col'}
 
 require('chat')
@@ -10,6 +10,7 @@ require('tables')
 local slips = require('slips')
 local res_items = require('resources').items
 local key_items = require('resources').key_items
+local item_descriptions = require('resources').item_descriptions
 local extdata = require('extdata')
 
 local collections = require('collections') 
@@ -28,19 +29,20 @@ sorted_bags = L{'safe', 'safe2', 'storage', 'locker',
                 'slip 31', 'key items', }
 
 
-function add_result(result,bag,count,augments)
+function add_result(result,bag,count,augments,lvl)
     local count = count > 1 and ' ('..count..')' or ''
+    local level = lvl == nil and '' or ' %s':format(lvl)
     local rank = augments ~= nil and augments.rank ~= nil and ' (Rank: %s)':format(augments.rank) or ''
-    return (bag == 'missing' and result:color(259) or result:color(258)) .. count .. rank
+    return (bag == 'missing' and result:color(259) or result:color(258)) .. count .. level .. rank
 end
 
-function curate_collection(collection, name, results, bag, count, augments)
+function curate_collection(collection, name, results, bag, count, augments, level)
     local count = count or 1
     if collection:contains(name) then
         if not results[bag] then
             results[bag] = L{}
         end
-        results[bag]:append(add_result(name, bag, count, augments))
+        results[bag]:append(add_result(name,bag,count,augments,level))
         local m = results.missing:find(name)
         if m then
             results.missing:remove(m)
@@ -59,8 +61,12 @@ function curate(set)
 			data = inventory[bag][i]
 			if data.id ~= 0 then
                 local name = res_items[data.id].name
+                local level = res_items[data.id].item_level or res_items[data.id].level or ''
+                local ag = item_descriptions[data.id] and item_descriptions[data.id].en:find("Afterglow") and true or false
+                level = level == 99 and ag and (level .. " II") or level == 119 and ag and (level .. " III") or level
                 local ext = extdata.decode(data)
-                curate_collection(collection, name, results, bag, data.count, ext)
+
+                curate_collection(collection, name, results, bag, data.count, ext, level)
 			end
         end
     end
@@ -70,7 +76,7 @@ function curate(set)
         local slip_name = 'slip '..tostring(slips.get_slip_number_by_id(slip_id)):lpad('0', 2)
         for _, id in ipairs(slip_storages[slip_id]) do
             local name = res_items[id].name
-            curate_collection(collection, name, results, slip_name)            
+            curate_collection(collection, name, results, slip_name)
         end
     end
     
