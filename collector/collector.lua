@@ -8,9 +8,10 @@ require('logger')
 require('tables')
 
 local slips = require('slips')
-local res_items = require('resources').items
-local key_items = require('resources').key_items
-local item_descriptions = require('resources').item_descriptions
+local resources = require('resources')
+local res_items = resources.items
+local key_items = resources.key_items
+local item_descriptions = resources.item_descriptions
 local extdata = require('extdata')
 
 local collections = require('collections') 
