@@ -31,7 +31,7 @@ sorted_bags = L{'safe', 'safe2', 'storage', 'locker',
 
 function add_result(result,bag,count,augments,lvl)
     local count = count > 1 and ' ('..count..')' or ''
-    local level = lvl == nil and '' or ' %s':format(lvl)
+    local level = lvl ~= nil and ' %s':format(lvl) or ''
     local rank = augments ~= nil and augments.rank ~= nil and ' (Rank: %s)':format(augments.rank) or ''
     return (bag == 'missing' and result:color(259) or result:color(258)) .. count .. level .. rank
 end
@@ -62,8 +62,10 @@ function curate(set)
 			if data.id ~= 0 then
                 local name = res_items[data.id].name
                 local level = res_items[data.id].item_level or res_items[data.id].level or ''
-                local ag = item_descriptions[data.id] and item_descriptions[data.id].en:find("Afterglow") and true or false
-                level = level == 99 and ag and (level .. " II") or level == 119 and ag and (level .. " III") or level
+                if level >= 99 then 
+                    local ag = item_descriptions[data.id] and item_descriptions[data.id].en:find("Afterglow") and true or false
+                    level = level == 99 and ag and (level .. " II") or level == 119 and ag and (level .. " III") or level
+                end
                 local ext = extdata.decode(data)
 
                 curate_collection(collection, name, results, bag, data.count, ext, level)
