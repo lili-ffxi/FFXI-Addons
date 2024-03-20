@@ -8,10 +8,7 @@ require('logger')
 require('tables')
 
 local slips = require('slips')
-local resources = require('resources')
-local res_items = resources.items
-local key_items = resources.key_items
-local item_descriptions = resources.item_descriptions
+local res = require('resources')
 local extdata = require('extdata')
 
 local collections = require('collections') 
@@ -61,10 +58,10 @@ function curate(set)
 		for i = 1, inventory[bag].max do
 			data = inventory[bag][i]
 			if data.id ~= 0 then
-                local name = res_items[data.id].name
-                local level = res_items[data.id].item_level or res_items[data.id].level or ''
+                local name = res.items[data.id].name
+                local level = res.items[data.id].item_level or res.items[data.id].level or ''
                 if level >= 99 then 
-                    local ag = item_descriptions[data.id] and item_descriptions[data.id].en:find("Afterglow") and true or false
+                    local ag = res.item_descriptions[data.id] and res.item_descriptions[data.id].en:find("Afterglow") and true or false
                     level = level == 99 and ag and (level .. " II") or level == 119 and ag and (level .. " III") or level
                 end
                 local ext = extdata.decode(data)
@@ -78,20 +75,20 @@ function curate(set)
     for _, slip_id in ipairs(slips.storages) do
         local slip_name = 'slip '..tostring(slips.get_slip_number_by_id(slip_id)):lpad('0', 2)
         for _, id in ipairs(slip_storages[slip_id]) do
-            local name = res_items[id].name
+            local name = res.items[id].name
             curate_collection(collection, name, results, slip_name)
         end
     end
     
     for _, id in ipairs(windower.ffxi.get_key_items()) do
-        local name = key_items[id].name
+        local name = res.key_items[id].name
         curate_collection(collection, name, results, 'key items')
     end
     
     log('Results:')
     for i=#results.missing,1,-1 do
         local name = results.missing[i]
-        local item = res_items:with('name', name) or key_items:with('name', name)
+        local item = res.items:with('name', name) or res.key_items:with('name', name)
         if not item then
             log('invalid item:', name:color(123)..'.', 'Check the spelling!')
             results.missing:remove(i)
