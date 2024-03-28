@@ -1,6 +1,6 @@
 _addon.name = 'Collector'
 _addon.author = 'Lili'
-_addon.version = '0.2.2'
+_addon.version = '0.2.3'
 _addon.commands = {'collection','collection','col'}
 
 require('chat')
@@ -160,7 +160,7 @@ windower.register_event('addon command', function(...)
     
     local arg = args:concat(' '):lower()
     
-    if collections[arg] then
+    if type(collections[arg]) == 'table' then
         curate(arg)
     else
         if arg ~= 'help' then
