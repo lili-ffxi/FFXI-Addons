@@ -20,7 +20,7 @@ Last update to the database: 23 Dec 2023
 You can add your custom sets to the addon. Just create a file called `custom.lua` inside the addon directory, and fill it like this, in standard lua format:
 ```
 return T{
-  ['never without'} = { "Echo drops", "Silent Oil", "Prism Powder", },
+  ['never without'] = { "Echo drops", "Silent Oil", "Prism Powder", },
 }
 ```
 
