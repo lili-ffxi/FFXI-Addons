@@ -1,6 +1,6 @@
 _addon.name = 'Collector'
 _addon.author = 'Lili'
-_addon.version = '0.2.1'
+_addon.version = '0.2.2'
 _addon.commands = {'collection','collection','col'}
 
 require('chat')
@@ -27,10 +27,10 @@ sorted_bags = L{'safe', 'safe2', 'storage', 'locker',
                 'slip 31', 'key items', }
 
 
-function add_result(result,bag,count,augments,lvl)
+function add_result(result, bag, count, augments, lvl)
     local count = count > 1 and ' ('..count..')' or ''
-    local level = lvl ~= nil and ' %s':format(lvl) or ''
-    local rank = augments ~= nil and augments.rank ~= nil and ' (Rank: %s)':format(augments.rank) or ''
+    local level = lvl and ' %s':format(lvl) or ''
+    local rank = augments and augments.rank and ' (Rank: %s)':format(augments.rank) or ''
     return (bag == 'missing' and result:color(259) or result:color(258)) .. count .. level .. rank
 end
 
@@ -60,8 +60,8 @@ function curate(set)
 			if data.id ~= 0 then
                 local name = res.items[data.id].name
                 local level = res.items[data.id].item_level or res.items[data.id].level or ''
-                if level >= 99 then 
-                    local ag = res.item_descriptions[data.id] and res.item_descriptions[data.id].en:find("Afterglow") and true or false
+                if type(level) == 'number' and level >= 99 then 
+                    local ag = res.item_descriptions[data.id] and res.item_descriptions[data.id].en:find("Afterglow")
                     level = level == 99 and ag and (level .. " II") or level == 119 and ag and (level .. " III") or level
                 end
                 local ext = extdata.decode(data)
