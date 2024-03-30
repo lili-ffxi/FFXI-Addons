@@ -26,10 +26,14 @@ Complete addons:
 - Silt Tracker: track earnings of Silt and Beads in Escha/Reisenjima.  
 - TPSReport: exports an XML list of current alliance members.
 - special: makes you feel special.
-- position_manager: frontend for the wincontrol plugin to set position and screen size per character. DO NOT USE THIS, download it from windower instead.
+- position_manager: frontend for the wincontrol plugin to set position and screen size per character. _DO NOT USE THIS, download it from windower instead._
 - statsearch: full text search of the gear you own, filtered (or not) by job. Need to know what pieces you can equip that have Magic Defense? Now you can.
 - collector: display owned and missing items from an item set. Want to know how many reive capes you have? Pulse weapons? Llith drops?
 - tellapart: add progressive letters to mobs with identical names: Mandragora A, Mandragora B, Mandragora C, etc, instead of endless identical Mandragoras.
+- augments: search items by name and print their augments to chatlog. If you need to know how many Chironic Hoses you own, and what their augments are.
+- clevel: prints your current true master level to chatlog while under level sync.
+- tiptoes: applies Sneak and Invisible with a single command according to job: supports spells, Spectral Jig, Ninjutsu, and items (Silent Oils and Prism Powders).
+- waveback: wave back to people that wave/check you.
 
 Incomplete addons:
 - Friendzone: automatically calls trusts over and over. A bit bugged but workable.
