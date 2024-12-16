@@ -1,1 +1,1 @@
-_addon.version = '0.0.1'
+_addon.version = '0.0.3'
