@@ -1,7 +1,7 @@
 _addon.name = 'atreplace'
 _addon.author = 'Lili'
-_addon.version = '1.3.0'
-_addon.commands = { _addon.name, 'at' }
+_addon.version = '1.4.2'
+_addon.commands = { 'atreplace', 'at' }
 
 local res = require('resources')
 require('pack')
@@ -78,21 +78,32 @@ windower.register_event('addon command', function(...)
         table.remove(args,1)
         local arg = args:concat(' ')
         local query = arg:gsub('%a', function(char) return string.format("([%s%s])", char:lower(), char:upper()) end)
+        
         log("Search results for '%s'":format(arg:color(258)))
         for cat, t in pairs(validterms) do
             local r = ''
             for name,id in pairs(t) do
-                if name:find(arg) then
+                if name:match(query) then
                     r = '%s %s,':format(r, res[cat][id][lang])
                 end
             end
             if #r > 512 then
-                r = '(Too many results; please provide a longer string.)'
-            elseif #r > 1 then
+                local msg = '... ' .. '(too many items, try using a longer string) ':color(123)
+                local pos = r:find(',', 512-#msg)
+                r = r:sub(1, pos-1) .. msg
+            end
+            if #r > 1 then
                 log('[' .. cat:upper() .. ']', r:sub(1,-2))
             end
         end
         
         return
+    elseif mode == 'c' or mode == 'copy' then
+        table.remove(args,1)
+        local str = args:concat(' '):gsub("_%((..-)%)", at_term)
+        windower.copy_to_clipboard(windower.from_shift_jis(str))
+    
+        return
     end
 end)
+
