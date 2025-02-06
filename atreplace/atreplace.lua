@@ -1,6 +1,6 @@
 _addon.name = 'atreplace'
 _addon.author = 'Lili'
-_addon.version = '1.4.2'
+_addon.version = '1.4.3'
 _addon.commands = { 'atreplace', 'at' }
 
 local res = require('resources')
@@ -17,7 +17,7 @@ at_term = function(str)
     if not cache[term] then
         local at    
         local id = validterms.auto_translates[term] or validterms.items[term] or validterms.key_items[term] 
-        
+
         if id then
             -- arcon is the best
             local is_item = validterms.items[term] and true
@@ -37,7 +37,7 @@ at_term = function(str)
        
         cache[term] = at or str
     end
-   
+
     return cache[term]
 end
 
@@ -65,15 +65,15 @@ end)
 windower.register_event('addon command', function(...)
     local args = T{...}
     local mode = args[1] and args[1]:lower() or 'help'
-    
+
     if mode == 'r' or mode == 'reload' then
         windower.send_command('lua r '.._addon.name)
         return
-        
+
     elseif mode == 'u' or mode == 'unload' then
         windower.send_command('lua u '.._addon.name)
         return
-    
+
     elseif mode == 'search' or mode == 'find' then
         table.remove(args,1)
         local arg = args:concat(' ')
@@ -88,7 +88,7 @@ windower.register_event('addon command', function(...)
                 end
             end
             if #r > 512 then
-                local msg = '... ' .. '(too many items, try using a longer string) ':color(123)
+                local msg = '...\n' .. '(too many %s, try using a longer search string) ':format(cat):color(123)
                 local pos = r:find(',', 512-#msg)
                 r = r:sub(1, pos-1) .. msg
             end
@@ -98,11 +98,12 @@ windower.register_event('addon command', function(...)
         end
         
         return
+
     elseif mode == 'c' or mode == 'copy' then
         table.remove(args,1)
         local str = args:concat(' '):gsub("_%((..-)%)", at_term)
         windower.copy_to_clipboard(windower.from_shift_jis(str))
-    
+
         return
     end
 end)
