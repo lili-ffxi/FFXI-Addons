@@ -34,7 +34,7 @@ windower.register_event('load', function()
 
         local version_url = "https://raw.githubusercontent.com/lili-ffxi/FFXI-Addons/refs/heads/master/readable/readable.lua"
         local version_pattern = "_addon.version *= *['\"](.-)['\"]"
-        local file_path = windower.addon_path .. "readable1.lua"
+        local file_path = windower.addon_path .. "readable.lua"
         
         get_txt(version_url, function(response, code, body)
             if code == 200 then
