@@ -7,7 +7,7 @@ local config = require('config')
 
 local default = { 
     separator = ',',
-    modes = { [121] = true, [150] = true, [151] = true, [152] = true, [190] = true, [210] = true },
+    modes = { [121] = true, [148] = true, [150] = true, [151] = true, [152] = true, [190] = true, [210] = true },
     timestamps = true,
     bignumbers = true,
     autoupdate = true,
@@ -77,15 +77,15 @@ windower.register_event('incoming text', function(org, mod, mode_org, mode_mod, 
     local changed = false
 
     if settings.timestamps then
-        local changed = true
+        changed = true
         mod = tostring(mod):gsub('(%d%d+) seconds', function(str)
-            --print(os.date("%X", str), str)
+            print(os.date("%X", str), str)
             return tonumber(str) >= 60 and os.date("%X", str) or str..' seconds'
         end)
     end
 
     if settings.bignumbers then
-        local changed = true      
+        changed = true      
         mod = mod:gsub('([1-9]%d%d%d+)', function(str)
             return tostring(str):reverse():gsub("(%d%d%d)","%1"..settings.separator):gsub(",(%-?)$","%1"):reverse()
         end)
