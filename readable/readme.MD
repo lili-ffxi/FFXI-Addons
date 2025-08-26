@@ -14,4 +14,4 @@ Readable is a Windower addon for Final Fantasy XI that makes in-game text easier
 - The addon will auto-update.
 
 ## Support
-Discord server: http://discord.gg/uBPg7quNxD or FFXIAH.
+Discord server: http://discord.gg/uBPg7quNxD or https://www.ffxiah.com/forum/topic/58594/readable-make-npcs-readable-again/.
