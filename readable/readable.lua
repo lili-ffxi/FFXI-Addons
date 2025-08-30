@@ -1,6 +1,6 @@
 _addon.name = 'readable'
 _addon.author = 'Lili'
-_addon.version = '0.1.0'
+_addon.version = '0.1.1'
 _addon.command = 'readable'
 
 local config = require('config')
@@ -79,7 +79,6 @@ windower.register_event('incoming text', function(org, mod, mode_org, mode_mod, 
     if settings.timestamps then
         changed = true
         mod = tostring(mod):gsub('(%d%d+) seconds', function(str)
-            print(os.date("%X", str), str)
             return tonumber(str) >= 60 and os.date("%X", str) or str..' seconds'
         end)
     end
