@@ -23,7 +23,7 @@ default.text_box_settings = {
     bg = { visible = false},
     text = {
         size = 12,
-        font = 'Consolas',
+        font = 'MS Gothic',
         bold = true,
         italic = true,
         alpha = 255,
