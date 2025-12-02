@@ -1,6 +1,7 @@
 _addon.name = 'Weathermon'
 _addon.author = 'Lili'
-_addon.version = '0.1.3'
+_addon.version = '0.2.0'
+_addon.commands = {'weathermon', 'wr'}
 
 texts = require('texts')
 config = require('config')
@@ -18,13 +19,15 @@ storms = {
     [589] = 5, [590] = 13, [591] = 11, [592] = 9, [593] = 15, [594] = 7, [595] = 17, [596] = 19
 }
 
-local default = {}
+local default = {
+    enableReport = true,
+}
 default.text_box_settings = {
     pos = {x = 25, y = 120,},
     bg = { visible = false},
     text = {
         size = 12,
-        font = 'MS Gothic',
+        font = 'Segoe UI',
         bold = true,
         italic = true,
         alpha = 255,
@@ -47,15 +50,15 @@ local settings = config.load(default)
 local box = texts.new(settings.box_string, settings.text_box_settings, settings)
 
 
-function update_weather(id)
+function update_weather(force_report)
     local info = windower.ffxi.get_info()
     if not info.logged_in then
         return
     end
     
     local day = days[info.day].name
-
-    local weather_id = id or info.weather
+    
+    local weather_id = info.weather
     local weather = weathers[weather_id].name
 
     local player = windower.ffxi.get_player()
@@ -69,12 +72,17 @@ function update_weather(id)
     end
 
     local element = elements[weathers[weather_id].element].name
-    local intensity = weathers[weather_id].intensity
+    local intensity = weathers[weather_id].intensity > 1 and 'Double ' or ''
 
     box.day = day
     box.weather = weather
-    box.intensity = (intensity > 1 and 'Double ' or '')
+    box.intensity = intensity
     box.element = element
+    
+    if force_report or settings.enableReport then
+        local weather_report = 'The weather is %s (%s).':format(intensity .. element, weather)
+        log(weather_report)
+    end
 end
 
 windower.register_event('prerender',function()
@@ -89,9 +97,32 @@ windower.register_event('load', 'login', 'weather change', 'day change', functio
     update_weather()
 end)
 
-windower.register_event('gain buff','lose buff',function(id)
+local last_buff = -1
+windower.register_event('gain buff', 'lose buff', function(id)
     if not storms[id] then
         return
     end
-    update_weather()
+    
+    if os.clock() - last_buff > 1 then 
+        last_buff = os.clock()
+        update_weather()
+    end
+end)
+
+windower.register_event('addon command', function(cmd, ...)
+    cmd = cmd and cmd:lower() or 'h'
+    local args = {...}
+    if cmd == 'r' or cmd == 'report' then
+        if args[1] == 'on' then
+            settings.enableReport = true
+        elseif args[1] == 'off' then
+            settings.enableReport = false
+        else
+            update_weather(true)
+        end
+        
+        log('Report', settings.enableReport and 'enabled.' or 'disabled.')
+        
+        config.save(settings)
+    end
 end)
