@@ -55,7 +55,7 @@ function update_weather(id)
     local weather = weathers[weather_id].name
 
     local player = windower.ffxi.get_player()
-    if player.buffs then
+    if player then 
       for i,v in pairs(player.buffs) do
           if storms[v] then
               weather_id = storms[v]
@@ -75,7 +75,12 @@ end
 update_weather()
 
 windower.register_event('prerender',function()
-    if windower.ffxi.get_info().menu_open then
+    local info = windower.ffxi.get_info()
+    if not info.logged_in then 
+        return
+    end
+    
+    if info.menu_open then
         box:hide()
     else
         box:show()
