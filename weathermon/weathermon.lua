@@ -1,6 +1,6 @@
 _addon.name = 'Weathermon'
 _addon.author = 'Lili'
-_addon.version = '0.1.0'
+_addon.version = '0.1.3'
 
 texts = require('texts')
 config = require('config')
@@ -40,19 +40,22 @@ default.text_box_settings = {
         },
     }
 }
-
 default.box_string = '${day} - ${intensity}${element} (${weather})'
 
 local settings = config.load(default)
 
-local box = texts.new(settings.box_string, settings.text_box_settings)
+local box = texts.new(settings.box_string, settings.text_box_settings, settings)
 
 
 function update_weather(id)
+    local info = windower.ffxi.get_info()
+    if not info.logged_in then
+        return
+    end
+    
+    local day = days[info.day].name
 
-    local day = days[windower.ffxi.get_info().day].name
-
-    local weather_id = id or windower.ffxi.get_info().weather
+    local weather_id = id or info.weather
     local weather = weathers[weather_id].name
 
     local player = windower.ffxi.get_player()
@@ -70,25 +73,19 @@ function update_weather(id)
 
     box.day = day
     box.weather = weather
-    box.element = (intensity > 1 and 'Double ' or '') .. element
+    box.intensity = (intensity > 1 and 'Double ' or '')
+    box.element = element
 end
 
-update_weather()
-
 windower.register_event('prerender',function()
-    local info = windower.ffxi.get_info()
-    if not info.logged_in then 
-        return
-    end
-    
-    if info.menu_open then
+    if windower.ffxi.get_info().menu_open then
         box:hide()
     else
         box:show()
     end
 end)
 
-windower.register_event('weather change','day change', function(id)
+windower.register_event('load', 'login', 'weather change', 'day change', function(id)
     update_weather()
 end)
 
