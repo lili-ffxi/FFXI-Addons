@@ -1,6 +1,6 @@
 _addon.name = 'atreplace'
 _addon.author = 'Lili'
-_addon.version = '1.4.3'
+_addon.version = '1.4.4'
 _addon.commands = { 'atreplace', 'at' }
 
 local res = require('resources')
@@ -14,30 +14,31 @@ local lang = windower.ffxi.get_info().language:lower()
 at_term = function(str)
     local term = str:lower()
 
-    if not cache[term] then
-        local at    
-        local id = validterms.auto_translates[term] or validterms.items[term] or validterms.key_items[term] 
-
-        if id then
-            -- arcon is the best
-            local is_item = validterms.items[term] and true
-            local high = (id / 0x100):floor() ~= 0
-            local low = (id % 0x100) ~= 0
-            local any_zero = not (high and low)
-            local mask = validterms.auto_translates[term] and 2:char() or 'qqqqq':pack(
-                low,
-                high,
-                not is_item == any_zero,
-                is_item and any_zero,
-                not is_item
-            )
-
-            at = 'CS1C>HC':pack(0xFD, mask, 2, id, 0xFD):gsub("%z", 0xFF:char())
-        end
-       
-        cache[term] = at or str
+    if cache[term] then
+        return cache[term]
     end
 
+    local at
+    local id = validterms.auto_translates[term] or validterms.items[term] or validterms.key_items[term] 
+
+    if id then
+        -- Arcon is the best
+        local is_item = validterms.items[term] and true
+        local high = (id / 0x100):floor() ~= 0
+        local low = (id % 0x100) ~= 0
+        local any_zero = not (high and low)
+        local mask = validterms.auto_translates[term] and 2:char() or 'qqqqq':pack(
+            low,
+            high,
+            not is_item == any_zero,
+            is_item and any_zero,
+            not is_item
+        )
+
+        at = 'CS1C>HC':pack(0xFD, mask, 2, id, 0xFD):gsub("%z", 0xFF:char())
+    end
+
+    cache[term] = at or str
     return cache[term]
 end
 
@@ -64,17 +65,17 @@ end)
 
 windower.register_event('addon command', function(...)
     local args = T{...}
-    local mode = args[1] and args[1]:lower() or 'help'
-
-    if mode == 'r' or mode == 'reload' then
-        windower.send_command('lua r '.._addon.name)
+    local cmd = args[1] and args[1]:lower() or 'help'
+    
+    if cmd == 'r' or cmd == 'reload' then
+        windower.send_command('lua r ' .. _addon.name)
         return
-
-    elseif mode == 'u' or mode == 'unload' then
-        windower.send_command('lua u '.._addon.name)
+        
+    elseif cmd == 'u' or cmd == 'unload' then
+        windower.send_command('lua u ' .. _addon.name)
         return
-
-    elseif mode == 'search' or mode == 'find' then
+    
+    elseif cmd == 'search' or cmd == 'find' then
         table.remove(args,1)
         local arg = args:concat(' ')
         local query = arg:gsub('%a', function(char) return string.format("([%s%s])", char:lower(), char:upper()) end)
@@ -93,17 +94,16 @@ windower.register_event('addon command', function(...)
                 r = r:sub(1, pos-1) .. msg
             end
             if #r > 1 then
-                log('[' .. cat:upper() .. ']', r:sub(1,-2))
+                log('[' .. cat:upper() .. ']', r:sub(1, -2))
             end
         end
         
         return
-
-    elseif mode == 'c' or mode == 'copy' then
+    elseif cmd == 'c' or cmd == 'copy' then
         table.remove(args,1)
         local str = args:concat(' '):gsub("_%((..-)%)", at_term)
         windower.copy_to_clipboard(windower.from_shift_jis(str))
-
+    
         return
     end
 end)
