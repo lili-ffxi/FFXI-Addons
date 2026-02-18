@@ -1,5 +1,5 @@
 _addon.name = 'waveback'
-_addon.version = '0.0.1'
+_addon.version = '0.0.2'
 _addon.author = 'Lili'
 _addon.command = 'waveback'
 
@@ -48,7 +48,7 @@ windower.register_event('addon command',function(cmd,arg)
             windower.add_to_chat(207,_addon.name ..'Invalid argument.')
         end
     elseif cmd == 'response' then
-        action = arg
+        response = arg
     elseif cmd == 'help' then
         windower.add_to_chat(207,_addon.name .. ": Options: delay <n|'random'>; response </command>; help")
     end
