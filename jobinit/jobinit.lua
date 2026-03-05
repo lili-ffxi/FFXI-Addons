@@ -121,7 +121,7 @@ commands.commands = function(operation, command)
         return
     end
     
-    winower.send_command('command:',command)
+    windower.send_command('command:',command)
 end
 
 commands.reload = windower.send_command+{'lua r jobinit'}
