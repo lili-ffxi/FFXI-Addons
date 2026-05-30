@@ -1,6 +1,6 @@
 _addon.name = 'Weathermon'
-_addon.author = 'Lili'
-_addon.version = '0.2.0'
+_addon.author = 'Lili^H^H^H^HKayte'
+_addon.version = '0.2.0k'
 _addon.commands = {'weathermon', 'wr'}
 
 texts = require('texts')
